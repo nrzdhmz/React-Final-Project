@@ -96,7 +96,7 @@ const Header = () => {
           </div>
         </div>
         <div className="header-logo">
-          <Link to="/" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          <Link to="/">
             <img className='logo' src={logoSrc} alt="Logo" style={{ height: `${logoHeight}px` }} />
           </Link>
         </div>
