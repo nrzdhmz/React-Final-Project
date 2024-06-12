@@ -21,12 +21,36 @@
       }
       button{
         display: flex;
+        justify-content: center;
         background-color: transparent;
         border: none; 
         font-size: 12px;
         color: white;
+        position: relative;
+        width: fit-content;
+        overflow: hidden;
+        padding: 5px;
         a{
-
+          z-index: 10;
+          transition: 0.25s;
+        }
+        cursor: pointer;
+        &:hover{
+          a{
+            color: black;
+          }
+        }
+        &:hover::after{
+          top: 0;
+        }
+        &::after{
+          content: "";
+          transition: 0.2s ease-in-out;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background-color: white;
+          top: 98%;
         }
       }
     }

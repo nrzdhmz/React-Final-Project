@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const Hero = () => {
   const heroData = [
-    {
+    { 
       imgSrc: WomenImg,
       altText: "Women",
       title: "WOMEN'S MAIOLICA COLLECTION FW24",

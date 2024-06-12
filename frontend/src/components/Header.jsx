@@ -1,25 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-// icons
+// ICONS
 import { IoIosSearch } from "react-icons/io";
 import { AiOutlineShopping } from "react-icons/ai";
-// logo
-import Logo from "../assets/images/Logo.png"
+// IMAGES
+import Logo from "../assets/images/Logo.png";
+import DG from "../assets/images/DG.png";
 import LogoWhite from "../assets/images/LogoWhite.png";
 
 const Header = () => {
   const [logoSrc, setLogoSrc] = useState(LogoWhite);
+  const [scrolled, setScrolled] = useState(false);
+  const [isTop, setIsTop] = useState(true); 
+  const [logoHeight, setLogoHeight] = useState(100); 
+
+  const handleScroll = () => {
+    const offset = window.scrollY;
+    if (offset > 50) {
+      setScrolled(true);
+      setIsTop(false); 
+      setLogoSrc(DG);
+      setLogoHeight(35); 
+    } else {
+      setScrolled(false);
+      setIsTop(true); 
+      setLogoSrc(LogoWhite);
+      setLogoHeight(100); 
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const handleMouseEnter = () => {
-    setLogoSrc(Logo);
+    if (isTop) {
+      setLogoSrc(Logo); 
+    }
   };
 
   const handleMouseLeave = () => {
-    setLogoSrc(LogoWhite);
+    if (isTop) {
+      setLogoSrc(LogoWhite); 
+    }
   };
 
   return (
-    <header className='header' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <header className={`header ${scrolled ? 'scrolled' : ''}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div className="header-container">
         <div className="header-top">
           <div className="header-business-units">
@@ -66,8 +96,8 @@ const Header = () => {
           </div>
         </div>
         <div className="header-logo">
-          <Link to="/">
-            <img className='logo' src={logoSrc} alt="Logo" />
+          <Link to="/" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            <img className='logo' src={logoSrc} alt="Logo" style={{ height: `${logoHeight}px` }} />
           </Link>
         </div>
         <div className="header-navigations">
