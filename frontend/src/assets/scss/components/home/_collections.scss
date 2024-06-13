@@ -1,0 +1,40 @@
+.collection-section{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 115px 325px 107px;
+  color: black;
+  font-family: 'MainFont', sans-serif;
+  flex-wrap: wrap;
+  gap: 30px;
+  background-color: #F3F3F3;
+  .collection-h2{
+    padding: 0 0 70px;
+  }
+  p{
+    font-size: 15px;
+    letter-spacing: 0.1rem;
+  }
+  img{
+    width: 100%;
+    height: 100%;
+  }
+  .button-wrapper{
+    gap: 60px;
+    button{
+      color: black;
+      &:hover::after{
+        top: 0;
+      }
+      &::after{
+        background-color: black;
+        top: 98%;
+      }
+      &:hover{
+        a{
+          color: white;
+        }
+      }
+    }
+  }
+}

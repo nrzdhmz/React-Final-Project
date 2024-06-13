@@ -4,7 +4,7 @@ import { heroData } from '../data/HeroData'
 
 const Hero = () => {
   return (
-    <section className='hero-section'>
+    <section className='hero-section section'>
       {heroData.map((item, index) => (
         <div className={`bg-container ${item.width}`} key={index}>
           <img src={item.imgSrc} alt={item.altText} />

@@ -1,4 +1,3 @@
-// src/data/heroData.js
 import MenImg from "../assets/images/boy.webp";
 import WomenImg from "../assets/images/girl.webp";
 import Sandals from "../assets/images/sandals.webp";
