@@ -13,7 +13,7 @@ const Hero = () => {
             <p>{item.description}</p>
             <div className="button-wrapper">
               {item.linkTexts.map((text, index) => (
-                <button key={index}>
+                <button className='button-hero' key={index}>
                   <Link to="/">{text}</Link>
                 </button>
               ))}

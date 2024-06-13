@@ -12,7 +12,7 @@ const Collections = () => {
           <p>{item.description}</p>
           <div className="button-wrapper">
             {item.linkTexts.map((text, idx) => (
-              <button key={idx}>
+              <button className='button-hero' key={idx}>
                 <Link to="/">{text}</Link>
               </button>
             ))}

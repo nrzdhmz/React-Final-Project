@@ -42,7 +42,7 @@ main{
   display: flex;
   gap: 40px;
 }
-button{
+.button-hero{
   display: flex;
   justify-content: center;
   background-color: transparent;
@@ -53,11 +53,11 @@ button{
   width: fit-content;
   overflow: hidden;
   padding: 5px;
+  cursor: pointer;
   a{
     z-index: 10;
     transition: 0.25s;
   }
-  cursor: pointer;
   &:hover{
     a{
       color: black;
