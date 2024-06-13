@@ -54,7 +54,7 @@ const Login = ({ onClose }) => {
         <>
           <h2 className='box-margin'>CREATE ACCOUNT</h2>
           <div className="login-form">
-          <div className="title-form input-container">
+            <div className="title-form input-container">
               <label htmlFor="register-title">TITLE*</label>
               <select id="register-title" name="title">
                 <option value="" disabled selected>-</option>
@@ -62,6 +62,7 @@ const Login = ({ onClose }) => {
                 <option value="Mrs">Mrs</option>
               </select>
             </div>
+            <br />
             <div className="name-form input-container">
               <label htmlFor="register-name">FIRST NAME</label>
               <input type="text" id="register-name" placeholder="First Name" />

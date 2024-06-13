@@ -91,6 +91,9 @@
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 20px;
+    .title-form{
+      margin-right: 50px;
+    }
     .input-container{
       display: flex;
       width: calc(50% - 20px);
@@ -100,6 +103,7 @@
         border: none;
         border-bottom: 1px solid black;
         outline: none;
+        padding-bottom: 10px;
       }
       label{
         margin: 0 0 12px;
