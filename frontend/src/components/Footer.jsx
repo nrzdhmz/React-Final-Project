@@ -3,6 +3,7 @@ import Logo from "../assets/images/LogoWhite.png";
 import FooterTool from './FooterTool';
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { HiOutlinePlus, HiOutlineMinus } from "react-icons/hi";
+import footerData from '../data/footerData';
 
 const Footer = () => {
   const [expandedItem, setExpandedItem] = useState(null);
@@ -14,49 +15,13 @@ const Footer = () => {
   const getSpecialsContent = () => {
     switch (expandedItem) {
       case 'customerCare':
-        return [
-          "Contacts",
-          "New Window",
-          "Delivery",
-          "New Window",
-          "Payments",
-          "Return and Refund",
-          "Need Help?",
-          "Site Map",
-        ];
+        return footerData.customerCare;
       case 'legalArea':
-        return [
-          "Conditions of Use",
-          "Conditions of Sale",
-          "Cookie policy",
-          "Returns Policy",
-          "Privacy Policy",
-          "Information Notice on personal data processing",
-        ];
+        return footerData.legalArea;
       case 'corporate':
-        return [
-          "Corporate",
-          "Career",
-          "DG Martini ®",
-          "New Window",
-          "Sustainability",
-          "Click To Send An Email",
-          "sustainability@dolcegabbana.com",
-          "Whistleblowing",
-        ];
+        return footerData.corporate;
       case 'followUs':
-        return [
-          "Facebook",
-          "Twitter",
-          "Instagram",
-          "Youtube",
-          "Pinterest",
-          "Linkedin",
-          "Weibo",
-          "WeChat",
-          "Line",
-          "Kakao",
-        ];
+        return footerData.followUs;
       default:
         return [];
     }
