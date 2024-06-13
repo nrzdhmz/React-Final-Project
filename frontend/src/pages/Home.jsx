@@ -1,12 +1,13 @@
 import React from 'react';
-import Header from '../components/Header';
 import Hero from '../components/Hero';
+import Collections from '../components/Collections';
 
 
 const Home = () => {
   return (
     <main>
       <Hero/>
+      <Collections/>
     </main>
   );
 };

@@ -1,16 +1,21 @@
+main{
+  display: flex;
+  flex-direction: column;
+}
 .hero-section{
   display: flex;
   color: white;
   font-family: 'MainFont', sans-serif;
   font-size: 12px;
+  display: flex;
+  flex-wrap: wrap;
   .bg-container{
-    width: 50%;
     position: relative;
     .hero-info{
       position: absolute;
       top: 70vh;
-      left: 100px;
-      display: flex;
+      left: 90px;
+      display: flex; 
       flex-direction: column;
       gap: 30px;  
       h2{
@@ -18,6 +23,10 @@
       }
       p{
         word-spacing: 0.1rem;
+      }
+      .button-wrapper{
+        display: flex;
+        gap: 40px;
       }
       button{
         display: flex;
@@ -50,7 +59,7 @@
           width: 100%;
           height: 100%;
           background-color: white;
-          top: 98%;
+          top: 95%;
         }
       }
     }
@@ -59,4 +68,14 @@
       height: 100%;
     }
   }
+}
+.w-50{
+  width: 50%;
+}
+.w-100{
+  width: 100%;
+}
+.mb-100{
+  top: auto!important;
+  bottom: 100px !important;
 }
