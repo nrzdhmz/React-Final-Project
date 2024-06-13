@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { IoIosSearch } from "react-icons/io";
 import { AiOutlineShopping } from "react-icons/ai";
-import { CgClose } from "react-icons/cg";
 import Logo from "../assets/images/Logo.png";
 import DG from "../assets/images/DG.png";
 import LogoWhite from "../assets/images/LogoWhite.png";
-import Login from './Login'; 
+import Login from './auth/Login'; 
 
 const Header = () => {
   const [logoSrc, setLogoSrc] = useState(LogoWhite);
