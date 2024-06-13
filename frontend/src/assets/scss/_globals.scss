@@ -13,7 +13,15 @@ body{
   font-family: 'MainFont', sans-serif;
 }
 
-
+button{
+  cursor: pointer;
+}
+label{
+  cursor: pointer;
+}
+a{
+  cursor: pointer;
+}
 
 @font-face {
   font-family: 'MainFont';
