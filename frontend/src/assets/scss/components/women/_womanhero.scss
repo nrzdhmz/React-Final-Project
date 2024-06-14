@@ -1,0 +1,26 @@
+.gender-hero{
+  display: flex;
+  flex-direction: column;
+  margin-top: 180px;
+  align-items: center;
+  gap: 50px;
+  h1{
+    font-size: 1rem;
+    line-height: 1.5rem;
+    letter-spacing: .06rem;
+    font-weight: 200;
+    padding: 0 0 30px;
+  }
+  img{
+    width: 40%;
+  }
+  p{
+    padding: 10px 0 30px;
+    width: 50%;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.6275rem;
+    letter-spacing: 0;
+    font-weight: 200;
+  }
+}

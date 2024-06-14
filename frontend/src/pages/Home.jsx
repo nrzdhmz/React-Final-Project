@@ -4,7 +4,7 @@ import Collections from '../components/Collections';
 import FullBg from "../assets/images/fullbg.webp";
 import Campaign from '../components/Campaign';
 import Carusel from '../components/Carusel';
-import Footer from '../components/Footer';
+import Footer from '../components/common_components/Footer';
 
 
 const Home = () => {

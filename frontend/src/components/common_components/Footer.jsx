@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Logo from "../assets/images/LogoWhite.png";
+import Logo from "../../assets/images/LogoWhite.png";
 import FooterTool from './FooterTool';
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { HiOutlinePlus, HiOutlineMinus } from "react-icons/hi";
-import footerData from '../data/footerData';
+import footerData from '../../data/footerData';
 
 const Footer = () => {
   const [expandedItem, setExpandedItem] = useState(null);

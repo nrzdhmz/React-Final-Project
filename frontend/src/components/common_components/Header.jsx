@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { IoIosSearch } from "react-icons/io";
 import { AiOutlineShopping } from "react-icons/ai";
-import Logo from "../assets/images/Logo.png";
-import DG from "../assets/images/DG.png";
-import LogoWhite from "../assets/images/LogoWhite.png";
-import Login from './auth/Login'; 
+import Logo from "../../assets/images/Logo.png";
+import DG from "../../assets/images/DG.png";
+import LogoWhite from "../../assets/images/LogoWhite.png";
+import Login from '../auth/Login'; 
+import Filter from './Filter';
 
 const Header = () => {
   const [logoSrc, setLogoSrc] = useState(LogoWhite);
@@ -13,6 +14,7 @@ const Header = () => {
   const [isTop, setIsTop] = useState(true);
   const [logoHeight, setLogoHeight] = useState(100);
   const [login, setLogin] = useState(false);
+  const location = useLocation();
 
   const handleScroll = () => {
     const offset = window.scrollY;
@@ -23,9 +25,9 @@ const Header = () => {
       setLogoHeight(35);
     } else {
       setScrolled(false);
-      setIsTop(true);
-      setLogoSrc(LogoWhite);
-      setLogoHeight(100);
+      setIsTop(true); 
+      setLogoSrc(location.pathname === '/women' || location.pathname === '/men' ? Logo : LogoWhite);
+      setLogoHeight(location.pathname === '/' ? 100 : 35);
     }
   };
 
@@ -34,7 +36,7 @@ const Header = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [location]);
 
   const handleMouseEnter = () => {
     if (isTop) {
@@ -44,7 +46,7 @@ const Header = () => {
 
   const handleMouseLeave = () => {
     if (isTop) {
-      setLogoSrc(LogoWhite);
+      setLogoSrc(location.pathname === '/women' || location.pathname === '/men' ? Logo : LogoWhite);
     }
   };
 
@@ -58,14 +60,18 @@ const Header = () => {
     if (offset > 50) {
       setLogoSrc(DG);
     } else {
-      setLogoSrc(LogoWhite);
+      setLogoSrc(Logo);
     }
     setLogin(true);
     document.body.style.overflow = 'hidden'; 
   };
 
   return (
-    <header className={`header ${scrolled ? 'scrolled' : ''}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <header
+      className={`header ${scrolled ? 'scrolled' : ''} ${location.pathname === '/women' || location.pathname === '/men' ? 'header-white' : 'header-black'}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {login && (
         <>
           <div className="cover" onClick={handleCloseLogin}></div>
@@ -119,7 +125,7 @@ const Header = () => {
         </div>
         <div className="header-logo">
           <Link to="/">
-            <img className='logo' src={logoSrc} alt="Logo" style={{ height: `${logoHeight}px` }} />
+            <img className={`logo ${location.pathname === '/women' || location.pathname === '/men' ? 'logo-women' : (isTop ? 'logo-white' : 'logo-dg')}`} src={logoSrc} alt="Logo" style={{ height: `${logoHeight}px` }} />
           </Link>
         </div>
         <div className="header-navigations">
@@ -132,10 +138,10 @@ const Header = () => {
                 <Link to="/">BAGS</Link>
               </li>
               <li className='navigation-item nav-hover'>
-                <Link to="/">WOMEN</Link>
+                <Link to="/women">WOMEN</Link>
               </li>
               <li className='navigation-item nav-hover'>
-                <Link to="/">MEN</Link>
+                <Link to="/men">MEN</Link>
               </li>
               <li className='navigation-item nav-hover'>
                 <Link to="/">DBVIB3</Link>
@@ -146,6 +152,7 @@ const Header = () => {
             </ul>
           </nav>
         </div>
+        {(location.pathname === '/women' || location.pathname === '/men') && <Filter/>}
       </div>
     </header>
   );
