@@ -1,10 +1,8 @@
 import express from "express";
 import prisma from "./prismaClient/index.js";
-import { configDotenv } from "dotenv";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user.routes.js";
-
-configDotenv();
+import productRoutes from "./routes/product.routes.js";
 
 const app = express();
 
@@ -12,8 +10,12 @@ const app = express();
 app.use(cookieParser());
 app.use(express.json());
 
+// Static files
+app.use("/static", express.static("public"));
+
 //Routes
 app.use("/api/user", userRoutes);
+app.use("/api/product", productRoutes);
 
 // Shutdow database connection on shutdown
 const shutdown = async () => {
