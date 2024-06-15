@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useAuth } from '../../context/authContext'; 
 
-const RegisterForm = ({ handleToggleView }) => {
+const RegisterForm = ({ handleToggleView, onClose }) => {
+  const { register } = useAuth(); 
   const [title, setTitle] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -10,18 +11,18 @@ const RegisterForm = ({ handleToggleView }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const userData = {
-      title,
-      firstName,
-      lastName,
-      email,
-      password,
-    };
     try {
-      const response = await axios.post('http://localhost:5000/api/user/signup', userData);
-      console.log(response.data);
+      const userData = {
+        title,
+        firstName,
+        lastName,
+        email,
+        password,
+      };
+      await register(userData); 
+      onClose();
     } catch (error) {
-      console.log(error);
+      console.error('Error registering', error);
     }
   };
 
@@ -87,18 +88,18 @@ const RegisterForm = ({ handleToggleView }) => {
           />
         </div>
         <div className="account-info">
-        <h2>CONSENT TO PERSONAL DATA PROCESSING</h2>
-        <ul>
-          <li className='check'>
-            <input type="checkbox"  id='checkbox1'/>
-            <label htmlFor="checkbox1">I agree to the collection and use of my personal data for marketing purposes</label>
-          </li>
-          <li className='check'>
-            <input type="checkbox"  id='checkbox2'/>
-            <label htmlFor="checkbox2">I agree to the collection, disclosure or processing of my personal data for profiling purposes</label>
-          </li>
-        </ul>
-      </div>
+          <h2>CONSENT TO PERSONAL DATA PROCESSING</h2>
+          <ul>
+            <li className='check'>
+              <input type="checkbox"  id='checkbox1'/>
+              <label htmlFor="checkbox1">I agree to the collection and use of my personal data for marketing purposes</label>
+            </li>
+            <li className='check'>
+              <input type="checkbox"  id='checkbox2'/>
+              <label htmlFor="checkbox2">I agree to the collection, disclosure or processing of my personal data for profiling purposes</label>
+            </li>
+          </ul>
+        </div>
         <button className='auth right' type="submit">
           Create Account
         </button>
