@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { useAuth } from '../../context/authContext';
 
-const LoginForm = ({ handleToggleView }) => {
+const LoginForm = ({ handleToggleView, onClose }) => {
+  const { login } = useAuth(); 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/user/login', { email, password });
-      console.log(response.data);
+      await login(email, password); 
+      onClose();  
     } catch (error) {
-      console.log(error);
+      console.error('Error logging in', error);
     }
   };
 

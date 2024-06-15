@@ -11,15 +11,15 @@ const Login = ({ onClose }) => {
   };
 
   const handleClose = () => {
-    onClose();
+    onClose(); // This function will close the modal
   };
 
   return (
     <div className="login">
       {isLogin ? (
-        <LoginForm handleToggleView={handleToggleView} />
+        <LoginForm handleToggleView={handleToggleView} onClose={handleClose} />
       ) : (
-        <RegisterForm handleToggleView={handleToggleView} />
+        <RegisterForm handleToggleView={handleToggleView} onClose={handleClose} />
       )}
       <CgClose className='close' onClick={handleClose} />
     </div>
