@@ -3,10 +3,19 @@ import prisma from "./prismaClient/index.js";
 import { configDotenv } from "dotenv";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user.routes.js";
+import cors from "cors";
 
 configDotenv();
 
 const app = express();
+
+var corsOptions = {
+  origin: "http://localhost:3000",
+  optionsSuccessStatus: 200,
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 // Middlewares
 app.use(cookieParser());
@@ -30,4 +39,4 @@ const shutdown = async () => {
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
 
-app.listen(3000, () => console.log("Running on 3000"));
+app.listen(5000, () => console.log("Running on 5000"));

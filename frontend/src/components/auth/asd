@@ -9,7 +9,7 @@ const LoginForm = ({ handleToggleView }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/user/login', { email, password });
+      const response = await axios.post('/api/user/login', { email, password });
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -42,18 +42,16 @@ const LoginForm = ({ handleToggleView }) => {
             required 
           />
         </div>
-        <div className="right">
-          <div className="forget">
-            <Link>Forgot your password?</Link>
-          </div>
-          <div className="forget">  
-            <label htmlFor="remember">Remember me</label>
-            <input type="checkbox" id='remember'/>
-          </div>
-          <button className='auth right mb70' type="submit">
-            Login
-          </button>
+        <div className="forget">
+          <Link>Forgot your password?</Link>
         </div>
+        <div className="forget">
+          <label htmlFor="remember">Remember me</label>
+          <input type="checkbox" id='remember'/>
+        </div>
+        <button className='auth right mb70' type="submit">
+          Login
+        </button>
       </form>
       <div className="account-info">
         <h2>CREATE ACCOUNT</h2>

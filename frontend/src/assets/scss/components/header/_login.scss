@@ -92,6 +92,10 @@
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 20px;
+    .right{
+      display: flex;
+      flex-direction: column;
+    }
     .title-form{
       margin-right: 50px;
     }
