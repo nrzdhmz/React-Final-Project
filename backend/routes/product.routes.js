@@ -4,8 +4,8 @@ import { createProductController, dislikeProductController, getProductsControlle
 const router = Router()
 
 router.post("/", createProductController)
-router.get("/", getProductsController)
+router.get("/", getProductsController) 
 router.put("/like/:id", likeProductController)
 router.delete("/like/:id", dislikeProductController)
 
-export default router
+export default router 

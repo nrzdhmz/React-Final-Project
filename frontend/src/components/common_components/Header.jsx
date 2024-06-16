@@ -7,10 +7,10 @@ import DG from "../../assets/images/DG.png";
 import LogoWhite from "../../assets/images/LogoWhite.png";
 import Login from '../auth/Login'; 
 import Filter from './Filter';
-import { useAuth } from '../../context/authContext'; 
+import { useAuth } from '../../context/authContext';
 
 const Header = () => {
-  const { user, logout } = useAuth();  
+  const { user } = useAuth();  
   const [logoSrc, setLogoSrc] = useState(LogoWhite);
   const [scrolled, setScrolled] = useState(false);
   const [isTop, setIsTop] = useState(true);
@@ -121,7 +121,7 @@ const Header = () => {
                 </li>
                 {user ? (
                   <li className='service-menu-item nav-hover'>
-                    <Link onClick={logout}>Logout</Link>
+                    <Link to='/'>My Accaunt</Link>
                   </li>
                 ) : (
                   <li onClick={handleOpenLogin} className='service-menu-item nav-hover'>

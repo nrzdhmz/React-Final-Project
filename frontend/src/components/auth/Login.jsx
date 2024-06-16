@@ -11,7 +11,7 @@ const Login = ({ onClose }) => {
   };
 
   const handleClose = () => {
-    onClose(); // This function will close the modal
+    onClose(); 
   };
 
   return (

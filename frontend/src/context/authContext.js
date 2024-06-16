@@ -13,16 +13,11 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await axios.post('http://localhost:5000/api/user/login', { email, password });
-      setUser(response.data.user);
+      setUser(response.data);
       localStorage.setItem('user', JSON.stringify(response.data.user));
     } catch (error) {
       console.error('Error logging in', error);
     }
-  };
-
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('user');
   };
 
   const register = async (userData) => {
@@ -36,7 +31,6 @@ export const AuthProvider = ({ children }) => {
   const authData = {
     user,
     login,
-    logout,
     register,
   };
 

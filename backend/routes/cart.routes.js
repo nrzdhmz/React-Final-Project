@@ -9,4 +9,4 @@ router.delete("/:id", removeProductFromCartController)
 router.put("/decrease/:id", decreaseQuantityController)
 router.put("/increase/:id", increaseQuantityController)
 
-export default router
+export default router 
