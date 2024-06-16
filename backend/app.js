@@ -2,11 +2,11 @@ import express from "express";
 import prisma from "./prismaClient/index.js";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user.routes.js";
-import productRoutes from "./routes/product.routes.js"
-import cartRoutes from "./routes/cart.routes.js"
+import productRoutes from "./routes/product.routes.js";
+import cartRoutes from "./routes/cart.routes.js";
 import cors from "cors";
 
-const PORT = process.env.PORT || 5100
+const PORT = process.env.PORT || 5100;
 
 const app = express();
 
@@ -16,10 +16,14 @@ var corsOptions = {
   credentials: true,
 };
 
-
 // Middlewares
 app.use(cors(corsOptions));
-app.use("/static", express.static("public"));
+app.use(
+  "/static",
+  express.static("public", {
+    maxAge: 1000 * 60 * 60 * 24 * 30 * 12,
+  })
+);
 app.use(cookieParser());
 app.use(express.json());
 
