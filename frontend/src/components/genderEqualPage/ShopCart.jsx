@@ -26,15 +26,18 @@ const ShopCart = () => {
   return (
     <div className={`cart ${showCart ? 'open' : 'closed'}`}>
       <div className="cart-header">
-        <h2>Liked Products</h2>
+        <h2>WISHLIST({likedProducts.length})</h2>
         <CgClose className='cart-close' onClick={handleCloseCart} />
       </div>
       <div className="cart-products">
         {likedProducts.map(product => (
           <div key={product.id} className="cart-product">
             <img src={`http://localhost:5000/static/${product.imageUrl}`} alt={product.name} />
-            <p>{product.name}</p>
-            <p>${product.price}</p>
+            <div className="cart-info">
+              <p className='head'>NEW COLLECTION</p>
+              <p>{product.name}</p>
+              <p>${product.price}</p>
+            </div>
           </div>
         ))}
       </div>
