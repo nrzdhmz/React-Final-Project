@@ -1,13 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Footer from '../components/common_components/Footer';
 import Filter from '../components/common_components/Filter';
 import Hero from '../components/genderEqualPage/Hero';
 import ShopCart from '../components/genderEqualPage/ShopCart';
 import { useAuth } from '../context/authContext';
+import useFetch from '../hooks/useFetch';
 
 const GenderPage = ({ gender }) => {
-  const { user } = useAuth();
-  console.log(user);
+  const { showCart, setShowCart, likeAttempt } = useAuth();
+
+  const handleCloseCart = () => {
+    setShowCart(false);
+    document.body.style.overflow = 'auto';
+  };
+
+  useEffect(() => {
+    if (showCart) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [showCart]);
 
   return (
     <>
@@ -15,12 +28,12 @@ const GenderPage = ({ gender }) => {
       <main className='main'>
         <Hero gender={gender} />
       </main>
-      {/* { user && (
+      {showCart && (
         <>
           <ShopCart />
-          <div className="cover"></div>
+          <div className="cover" onClick={handleCloseCart}></div>
         </>
-      )} */}
+      )}
       <Footer />
     </>
   );

@@ -9,10 +9,12 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [likeAttempt, setLikeAttempt] = useState(false); 
+  const [showCart, setShowCart] = useState(false); 
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/user/login', { email, password },{ withCredentials: true });
+      const response = await axios.post('http://localhost:5000/api/user/login', { email, password }, { withCredentials: true });
       setUser(response.data);
       localStorage.setItem('user', JSON.stringify(response.data.user));
     } catch (error) {
@@ -31,6 +33,7 @@ export const AuthProvider = ({ children }) => {
   const likeProduct = async (productId) => {
     try {
       const response = await axios.put(`http://localhost:5000/api/product/like/${productId}`, {}, { withCredentials: true });
+      setShowCart(true)
     } catch (error) {
       console.log(error);
     }
@@ -47,7 +50,6 @@ export const AuthProvider = ({ children }) => {
   const getlikeProducts = async () => {
     try {
       const response = await axios.get(`http://localhost:5000/api/product/like`, { withCredentials: true });
-      console.log(response);
       return response.data;
     } catch (error) {
       console.log('Error getting products:', error);
@@ -62,6 +64,10 @@ export const AuthProvider = ({ children }) => {
     likeProduct,
     removeLikeProduct,
     getlikeProducts,
+    likeAttempt, 
+    setLikeAttempt, 
+    showCart,
+    setShowCart,
   };
 
   return (

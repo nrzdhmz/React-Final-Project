@@ -25,7 +25,7 @@ const genderDetails = {
 const Hero = ({ gender }) => {  
   const { image, hoverImage, text, description } = genderDetails[gender];
   const { data, loading, error } = useFetch('http://localhost:5000/api/product');
-  const { likeProduct, removeLikeProduct, getlikeProducts, user } = useAuth();
+  const { likeProduct,setLikeAttempt, removeLikeProduct, getlikeProducts, user } = useAuth();
 
   const [visibleProducts, setVisibleProducts] = useState(8);
   const [hoveredProduct, setHoveredProduct] = useState(null);
@@ -67,9 +67,8 @@ const Hero = ({ gender }) => {
   const handleLike = async (productId) => {
     try {
       if (!user || !user.id) {
-        console.log("User is not logged in.");
-        
-        return ;
+        setLikeAttempt(true);
+        return;
       }
 
       if (likedProductIds.includes(productId)) {

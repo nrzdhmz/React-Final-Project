@@ -10,7 +10,7 @@ import Filter from './Filter';
 import { useAuth } from '../../context/authContext';
 
 const Header = () => {
-  const { user } = useAuth();  
+  const { user, setShowCart } = useAuth();
   const [logoSrc, setLogoSrc] = useState(LogoWhite);
   const [scrolled, setScrolled] = useState(false);
   const [isTop, setIsTop] = useState(true);
@@ -121,16 +121,18 @@ const Header = () => {
                 </li>
                 {user ? (
                   <li className='service-menu-item nav-hover'>
-                    <Link to='/profile/:'>My Accaunt</Link>
+                    <Link to='/profile/:'>My Account</Link>
                   </li>
                 ) : (
                   <li onClick={handleOpenLogin} className='service-menu-item nav-hover'>
                     <Link>Login</Link>
                   </li>
                 )}
-                <li className='service-menu-item nav-hover'>
-                  <AiOutlineShopping className='shop-icon'/>
-                </li>
+                {user && (
+                  <li className='service-menu-item nav-hover'>
+                    <AiOutlineShopping className='shop-icon' onClick={() => setShowCart(true)} />
+                  </li>
+                )}
               </ul>
             </nav>
           </div>
