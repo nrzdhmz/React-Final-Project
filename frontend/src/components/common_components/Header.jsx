@@ -121,7 +121,7 @@ const Header = () => {
                 </li>
                 {user ? (
                   <li className='service-menu-item nav-hover'>
-                    <Link to='/'>My Accaunt</Link>
+                    <Link to='/profile/:'>My Accaunt</Link>
                   </li>
                 ) : (
                   <li onClick={handleOpenLogin} className='service-menu-item nav-hover'>

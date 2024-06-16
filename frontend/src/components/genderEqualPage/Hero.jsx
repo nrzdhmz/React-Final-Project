@@ -1,32 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useFetch from '../../hooks/useFetch';  
 import Womenimg from "../../assets/images/womenHero.jpeg";
 import Menimg from "../../assets/images/menHero.jpeg";
-import example from "../../assets/images/women5.webp";
+import HoverMen from "../../assets/images/menhover.webp"; // Updated import
+import HoverWomen from "../../assets/images/womenhover.webp"; // Updated import
+import { IoMdHeartEmpty } from "react-icons/io";
+import { IoMdHeart } from "react-icons/io";
+
 
 const genderDetails = {
   women: {
     image: Womenimg,
+    hoverImage: HoverWomen,
     text: 'WOMEN',
     description: "Dolce&Gabbana's most iconic print returns with a captivating chromatic interplay, illuminating garments and accessories with its bold and feminine allure."
   },
   men: {
     image: Menimg,
+    hoverImage: HoverMen,
     text: 'MEN',
     description: "The iconic pattern graces garments with clean, sport-inspired lines, such as linen shirts, trousers, Bermuda shorts, and t-shirts. Each piece in the collection is crafted to honor the blend of tradition and modernity, paying tribute to Italian craftsmanship."
   }
 };
 
 const Hero = ({ gender }) => {  
-  const { image, text, description } = genderDetails[gender];
+  const { image, hoverImage, text, description } = genderDetails[gender];
+  const { data, loading, error } = useFetch('http://localhost:5000/api/product');
+  console.log(data);
 
-  // const { data, loading, error } = useFetch('http://localhost:5000/api/product');
+  const [visibleProducts, setVisibleProducts] = useState(8);
+  const [hoveredProduct, setHoveredProduct] = useState(null);
 
-  // console.log('Fetched products:', data);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading products!</p>;
 
-  // if (loading) return <div>Loading...</div>;
-  // if (error) return <div>Error: {error.message}</div>;  
+  const products = data.filter(product => product.category.toLowerCase() === gender);
 
+  const showMoreProducts = () => {
+    setVisibleProducts(prev => prev + 4);
+  };
+
+  const handleMouseEnter = (index) => {
+    setHoveredProduct(index);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredProduct(null);
+  };
+
+  
   return (
     <>
       <section className='gender-hero'>
@@ -36,28 +58,50 @@ const Hero = ({ gender }) => {
       </section>
       <section className="gender-shop">
         <div className="cards">
-          {[...Array(12)].map((_, index) => (
-            <div className="card" key={index}>
+          {products.slice(0, visibleProducts).map((product, index) => (
+            <div 
+              className="card" 
+              key={index} 
+              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseLeave={handleMouseLeave}
+            >
               <div className="card-img">
-                <img src={example} alt="img" />
+                <img 
+                  src={`http://localhost:5000/static/${product.imageUrl}`} 
+                  alt={product.name} 
+                />
+                {index === hoveredProduct && (
+                  <img 
+                    className="hover-img" 
+                    src={hoverImage} 
+                    alt={`${product.name} - Hover`} 
+                  />
+                )}
               </div>
               <p className='card-p'>
-                random ass dress 
+                {product.name}
               </p>
               <p className='card-price'>
-                $1234
+                ${product.price}
               </p>
+              {likedProducts.includes(product.id) ? (
+                <IoMdHeart className='heart' onClick={() => handleLikeToggle(product.id)} />
+              ) : (
+                <IoMdHeartEmpty className='heart' onClick={() => handleLikeToggle(product.id)} />
+              )}
             </div>
           ))}
         </div>
         <div className="load">
-            <p className='first'>SHOW 8 OF 12 PRODUCTS</p>
+            <p className='first'>SHOW {Math.min(visibleProducts, products.length)} OF {products.length} PRODUCTS</p>
             <div className="progress-bar">
-              <div className="filled" style={{ width: "62.5%" }}></div>
+              <div className="filled" style={{ width: `${(visibleProducts / products.length) * 100}%` }}></div>
             </div>
-            <button className='auth'>
-              LOAD MORE
-            </button>
+            {visibleProducts < products.length && 
+              <button className='auth' onClick={showMoreProducts}>
+                LOAD MORE
+              </button>
+            }
         </div>
       </section>
     </>
