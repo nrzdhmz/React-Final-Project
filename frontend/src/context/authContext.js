@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/user/login', { email, password });
+      const response = await axios.post('http://localhost:5000/api/user/login', { email, password },{ withCredentials: true });
       setUser(response.data);
       localStorage.setItem('user', JSON.stringify(response.data.user));
     } catch (error) {
@@ -30,10 +30,29 @@ export const AuthProvider = ({ children }) => {
 
   const likeProduct = async (productId) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/product/like/${productId}`,{ withCredentials: true }       );
+      const response = await axios.put(`http://localhost:5000/api/product/like/${productId}`, {}, { withCredentials: true });
       console.log(response);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const removeLikeProduct = async (productId) => {
+    try {
+      const response = await axios.delete(`http://localhost:5000/api/product/like/${productId}`, { withCredentials: true });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getlikeProducts = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/product/like`, { withCredentials: true });
+      return response.data.likedProducts;
+    } catch (error) {
+      console.log('Error fetching liked products:', error);
+      return [];
     }
   };
 
@@ -42,6 +61,8 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     likeProduct,
+    removeLikeProduct,
+    getlikeProducts,
   };
 
   return (

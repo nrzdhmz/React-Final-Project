@@ -1,13 +1,10 @@
-// Hero.js
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import useFetch from '../../hooks/useFetch';  
 import Womenimg from "../../assets/images/womenHero.jpeg";
 import Menimg from "../../assets/images/menHero.jpeg";
-import HoverMen from "../../assets/images/menhover.webp"; // Updated import
-import HoverWomen from "../../assets/images/womenhover.webp"; // Updated import
-import { IoMdHeartEmpty } from "react-icons/io";
-import { IoMdHeart } from "react-icons/io";
+import HoverMen from "../../assets/images/menhover.webp";
+import HoverWomen from "../../assets/images/womenhover.webp";
+import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { useAuth } from '../../context/authContext';
 
 const genderDetails = {
@@ -28,10 +25,26 @@ const genderDetails = {
 const Hero = ({ gender }) => {  
   const { image, hoverImage, text, description } = genderDetails[gender];
   const { data, loading, error } = useFetch('http://localhost:5000/api/product');
-  const { likeProduct } = useAuth();
+  const { likeProduct, removeLikeProduct, getlikeProducts, user } = useAuth();
 
-  const [visibleProducts, setVisibleProducts] = React.useState(8);
-  const [hoveredProduct, setHoveredProduct] = React.useState(null);
+  const [visibleProducts, setVisibleProducts] = useState(8);
+  const [hoveredProduct, setHoveredProduct] = useState(null);
+  const [likedProducts, setLikedProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchLikedProducts = async () => {
+      if (user && user.id) {
+        try {
+          const likedProductsData = await getlikeProducts();
+          setLikedProducts(likedProductsData);
+        } catch (error) {
+          console.error('Error fetching liked products:', error);
+        }
+      }
+    };
+
+    fetchLikedProducts();
+  }, [user, getlikeProducts]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading products!</p>;
@@ -52,9 +65,20 @@ const Hero = ({ gender }) => {
 
   const handleLike = async (productId) => {
     try {
-      await likeProduct(productId);
+      if (!user || !user.id) {
+        console.log("User is not logged in.");
+        return;
+      }
+
+      if (likedProducts.includes(productId)) {
+        await removeLikeProduct(productId);
+        setLikedProducts(prev => prev.filter(id => id !== productId));
+      } else {
+        await likeProduct(productId);
+        setLikedProducts(prev => [...prev, productId]);
+      }
     } catch (error) {
-      console.error('Error liking product', error);
+      console.error('Error toggling like', error);
     }
   };
 
@@ -93,7 +117,11 @@ const Hero = ({ gender }) => {
               <p className='card-price'>
                 ${product.price}
               </p>
-              <IoMdHeartEmpty className='heart' onClick={() => handleLike(product.id)} />
+              {likedProducts.includes(product.id) ? (
+                <IoMdHeart className='heart' onClick={() => handleLike(product.id)} />
+              ) : (
+                <IoMdHeartEmpty className='heart' onClick={() => handleLike(product.id)} />
+              )}
             </div>
           ))}
         </div>
