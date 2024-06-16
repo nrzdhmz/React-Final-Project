@@ -29,14 +29,15 @@ const Hero = ({ gender }) => {
 
   const [visibleProducts, setVisibleProducts] = useState(8);
   const [hoveredProduct, setHoveredProduct] = useState(null);
-  const [likedProducts, setLikedProducts] = useState([]);
+  const [likedProductIds, setLikedProductIds] = useState([]);
 
   useEffect(() => {
     const fetchLikedProducts = async () => {
       if (user && user.id) {
         try {
           const likedProductsData = await getlikeProducts();
-          setLikedProducts(likedProductsData);
+          const likedIds = likedProductsData.map(product => product.id);
+          setLikedProductIds(likedIds);
         } catch (error) {
           console.error('Error fetching liked products:', error);
         }
@@ -67,15 +68,16 @@ const Hero = ({ gender }) => {
     try {
       if (!user || !user.id) {
         console.log("User is not logged in.");
-        return;
+        
+        return ;
       }
 
-      if (likedProducts.includes(productId)) {
+      if (likedProductIds.includes(productId)) {
         await removeLikeProduct(productId);
-        setLikedProducts(prev => prev.filter(id => id !== productId));
+        setLikedProductIds(prev => prev.filter(id => id !== productId));
       } else {
         await likeProduct(productId);
-        setLikedProducts(prev => [...prev, productId]);
+        setLikedProductIds(prev => [...prev, productId]);
       }
     } catch (error) {
       console.error('Error toggling like', error);
@@ -117,7 +119,7 @@ const Hero = ({ gender }) => {
               <p className='card-price'>
                 ${product.price}
               </p>
-              {likedProducts.includes(product.id) ? (
+              {likedProductIds.includes(product.id) ? (
                 <IoMdHeart className='heart' onClick={() => handleLike(product.id)} />
               ) : (
                 <IoMdHeartEmpty className='heart' onClick={() => handleLike(product.id)} />

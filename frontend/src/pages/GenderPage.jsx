@@ -15,12 +15,12 @@ const GenderPage = ({ gender }) => {
       <main className='main'>
         <Hero gender={gender} />
       </main>
-      { user && (
+      {/* { user && (
         <>
-          {/* <ShopCart />
-          <div className="cover"></div> */}
+          <ShopCart />
+          <div className="cover"></div>
         </>
-      )}
+      )} */}
       <Footer />
     </>
   );

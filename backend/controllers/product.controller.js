@@ -176,7 +176,7 @@ export const getLikedProductsController = async (req, res) => {
                         id: true,
                         name: true,
                         price: true,
-                        image: true
+                        imageUrl : true
                     }
                 }
             }

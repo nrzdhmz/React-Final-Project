@@ -31,7 +31,6 @@ export const AuthProvider = ({ children }) => {
   const likeProduct = async (productId) => {
     try {
       const response = await axios.put(`http://localhost:5000/api/product/like/${productId}`, {}, { withCredentials: true });
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -40,7 +39,6 @@ export const AuthProvider = ({ children }) => {
   const removeLikeProduct = async (productId) => {
     try {
       const response = await axios.delete(`http://localhost:5000/api/product/like/${productId}`, { withCredentials: true });
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -49,9 +47,10 @@ export const AuthProvider = ({ children }) => {
   const getlikeProducts = async () => {
     try {
       const response = await axios.get(`http://localhost:5000/api/product/like`, { withCredentials: true });
-      return response.data.likedProducts;
+      console.log(response);
+      return response.data;
     } catch (error) {
-      console.log('Error fetching liked products:', error);
+      console.log('Error getting products:', error);
       return [];
     }
   };
