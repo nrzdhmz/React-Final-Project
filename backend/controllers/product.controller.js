@@ -155,3 +155,35 @@ export const dislikeProductController = async (req, res) => {
         handleError(err, res)
     }
 }
+
+/**
+ * 
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ */
+export const getLikedProductsController = async (req, res) => {
+    try {
+        const { token } = req.cookies
+        const userId = Number(jwt.verify(token, process.env.JWT_SECRET))
+        if (!userId) return res.status(401).json({ error: "Unauthorized" })
+        const likedProducts = await prisma.user.findFirst({
+            where: {
+                id: userId
+            },
+            select: {
+                likedProducts: {
+                    select: {
+                        id: true,
+                        name: true,
+                        price: true,
+                        image: true
+                    }
+                }
+            }
+        })
+        if (!likedProducts) return res.status(404).json({ error: "User not found" })
+        return res.status(200).json(likedProducts.likedProducts)
+    } catch (err) {
+        handleError(err, res)
+    }
+}
