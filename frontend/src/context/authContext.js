@@ -28,10 +28,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const likeProduct = async (productId) => {
+    try {
+      const response = await axios.put(`http://localhost:5000/api/product/like/${productId}`,{ withCredentials: true }       );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const authData = {
     user,
     login,
     register,
+    likeProduct,
   };
 
   return (

@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+// Hero.js
+
+import React from 'react';
 import useFetch from '../../hooks/useFetch';  
 import Womenimg from "../../assets/images/womenHero.jpeg";
 import Menimg from "../../assets/images/menHero.jpeg";
@@ -6,7 +8,7 @@ import HoverMen from "../../assets/images/menhover.webp"; // Updated import
 import HoverWomen from "../../assets/images/womenhover.webp"; // Updated import
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoMdHeart } from "react-icons/io";
-
+import { useAuth } from '../../context/authContext';
 
 const genderDetails = {
   women: {
@@ -26,10 +28,10 @@ const genderDetails = {
 const Hero = ({ gender }) => {  
   const { image, hoverImage, text, description } = genderDetails[gender];
   const { data, loading, error } = useFetch('http://localhost:5000/api/product');
-  console.log(data);
+  const { likeProduct } = useAuth();
 
-  const [visibleProducts, setVisibleProducts] = useState(8);
-  const [hoveredProduct, setHoveredProduct] = useState(null);
+  const [visibleProducts, setVisibleProducts] = React.useState(8);
+  const [hoveredProduct, setHoveredProduct] = React.useState(null);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading products!</p>;
@@ -48,7 +50,14 @@ const Hero = ({ gender }) => {
     setHoveredProduct(null);
   };
 
-  
+  const handleLike = async (productId) => {
+    try {
+      await likeProduct(productId);
+    } catch (error) {
+      console.error('Error liking product', error);
+    }
+  };
+
   return (
     <>
       <section className='gender-hero'>
@@ -84,11 +93,7 @@ const Hero = ({ gender }) => {
               <p className='card-price'>
                 ${product.price}
               </p>
-              {likedProducts.includes(product.id) ? (
-                <IoMdHeart className='heart' onClick={() => handleLikeToggle(product.id)} />
-              ) : (
-                <IoMdHeartEmpty className='heart' onClick={() => handleLikeToggle(product.id)} />
-              )}
+              <IoMdHeartEmpty className='heart' onClick={() => handleLike(product.id)} />
             </div>
           ))}
         </div>
