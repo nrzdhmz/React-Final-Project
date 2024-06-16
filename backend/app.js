@@ -18,8 +18,8 @@ var corsOptions = {
 
 
 // Middlewares
-app.use(cors(corsOptions));
-app.use("/static", express.static("public"));
+app.use(cors(corsOptions)); 
+app.use("/static", express.static("public")); 
 app.use(cookieParser());
 app.use(express.json());
 

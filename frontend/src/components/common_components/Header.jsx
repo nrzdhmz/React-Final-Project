@@ -8,6 +8,7 @@ import LogoWhite from "../../assets/images/LogoWhite.png";
 import Login from '../auth/Login'; 
 import Filter from './Filter';
 import { useAuth } from '../../context/authContext';
+import { IoMdHeartEmpty } from "react-icons/io";
 
 const Header = () => {
   const { user, setShowCart } = useAuth();
@@ -28,7 +29,7 @@ const Header = () => {
     } else {
       setScrolled(false);
       setIsTop(true); 
-      setLogoSrc(location.pathname === '/women' || location.pathname === '/men' ? Logo : LogoWhite);
+      setLogoSrc(location.pathname !== '/' ? Logo : LogoWhite);
       setLogoHeight(location.pathname === '/' ? 100 : 35);
     }
   };
@@ -48,7 +49,7 @@ const Header = () => {
 
   const handleMouseLeave = () => {
     if (isTop) {
-      setLogoSrc(location.pathname === '/women' || location.pathname === '/men' ? Logo : LogoWhite);
+      setLogoSrc(location.pathname !== '/'? Logo : LogoWhite);
     }
   };
 
@@ -74,7 +75,7 @@ const Header = () => {
 
   return (
     <header
-      className={`header ${scrolled ? 'scrolled' : ''} ${location.pathname === '/women' || location.pathname === '/men' ? 'header-white' : 'header-black'}`}
+      className={`header ${scrolled ? 'scrolled' : ''} ${location.pathname !== '/' ? 'header-white' : 'header-black'}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -108,7 +109,7 @@ const Header = () => {
                   <Link to="/">Alta Moda</Link>
                 </li>
               </ul>
-            </nav> 
+            </nav>  
           </div>
           <div className="service-menu">
             <nav className='navigation'>
@@ -121,17 +122,22 @@ const Header = () => {
                 </li>
                 {user ? (
                   <li className='service-menu-item nav-hover'>
-                    <Link to='/profile/:'>My Account</Link>
+                    <Link to={`/profile/${user.id}`}>My Account</Link>
                   </li>
                 ) : (
                   <li onClick={handleOpenLogin} className='service-menu-item nav-hover'>
                     <Link>Login</Link>
                   </li>
                 )}
-                {user && (
-                  <li className='service-menu-item nav-hover'>
-                    <AiOutlineShopping className='shop-icon' onClick={() => setShowCart(true)} />
-                  </li>
+                { location.pathname !== '/' && !location.pathname.startsWith('/profile/') && (
+                  <>
+                    <li className='service-menu-item nav-hover'>
+                      <AiOutlineShopping className='shop-icon'/>
+                    </li>
+                    <li className='service-menu-item nav-hover'>
+                      <IoMdHeartEmpty className='shop-icon' onClick={() => setShowCart(true)} />
+                    </li>
+                  </>
                 )}
               </ul>
             </nav>
@@ -139,30 +145,49 @@ const Header = () => {
         </div>
         <div className="header-logo">
           <Link to="/">
-            <img className={`logo ${location.pathname === '/women' || location.pathname === '/men' ? 'logo-women' : (isTop ? 'logo-white' : 'logo-dg')}`} src={logoSrc} alt="Logo" style={{ height: `${logoHeight}px` }} />
+            <img className={`logo ${location.pathname !== '/'  ? 'logo-women' : (isTop ? 'logo-white' : 'logo-dg')}`} src={logoSrc} alt="Logo" style={{ height: `${logoHeight}px` }} />
           </Link>
         </div>
         <div className="header-navigations">
           <nav className='navigation'>
             <ul className='navigation-list'>
-              <li className='navigation-item nav-hover'>
-                <Link to="/">VACATION ESSENTIALS</Link>
-              </li>
-              <li className='navigation-item nav-hover'>
-                <Link to="/">BAGS</Link>
-              </li>
-              <li className='navigation-item nav-hover'>
-                <Link to="/women">WOMEN</Link>
-              </li>
-              <li className='navigation-item nav-hover'>
-                <Link to="/men">MEN</Link>
-              </li>
-              <li className='navigation-item nav-hover'>
-                <Link to="/">DBVIB3</Link>
-              </li>
-              <li className='navigation-item nav-hover'>
-                <Link to="/">CHILDREN</Link>
-              </li>
+              { !location.pathname.startsWith('/profile/') ? (
+                <>
+                  <li className='navigation-item nav-hover'>
+                    <Link to="/">VACATION ESSENTIALS</Link>
+                  </li>
+                  <li className='navigation-item nav-hover'>
+                    <Link to="/">BAGS</Link>
+                  </li>
+                  <li className='navigation-item nav-hover'>
+                    <Link to="/women">WOMEN</Link>
+                  </li>
+                  <li className='navigation-item nav-hover'>
+                    <Link to="/men">MEN</Link>
+                  </li>
+                  <li className='navigation-item nav-hover'>
+                    <Link to="/">DBVIB3</Link>
+                  </li>
+                  <li className='navigation-item nav-hover'>
+                    <Link to="/">CHILDREN</Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className='navigation-item nav-hover'>
+                    <Link to={`/profile/${user.id}/recap`}>RECAP</Link>
+                  </li>
+                  <li className='navigation-item nav-hover'>
+                    <Link to={`/profile/${user.id}/orders`}>ORDERS</Link>
+                  </li>
+                  <li className='navigation-item nav-hover'>
+                    <Link to={`/profile/${user.id}/wishlist`}>WISHLIST</Link>
+                  </li>
+                  <li className='navigation-item nav-hover'>
+                    <Link to={`/profile/${user.id}/personal-data`}>PERSONAL DATA</Link>
+                  </li>
+                </>
+              )}
             </ul>
           </nav>
         </div>

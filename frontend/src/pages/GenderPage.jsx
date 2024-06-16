@@ -4,15 +4,10 @@ import Filter from '../components/common_components/Filter';
 import Hero from '../components/genderEqualPage/Hero';
 import ShopCart from '../components/genderEqualPage/ShopCart';
 import { useAuth } from '../context/authContext';
-import useFetch from '../hooks/useFetch';
+import BuyNow from '../components/genderEqualPage/BuyNow';
 
 const GenderPage = ({ gender }) => {
-  const { showCart, setShowCart, likeAttempt } = useAuth();
-
-  const handleCloseCart = () => {
-    setShowCart(false);
-    document.body.style.overflow = 'auto';
-  };
+  const { showCart, setShowCart } = useAuth();
 
   useEffect(() => {
     if (showCart) {
@@ -22,12 +17,23 @@ const GenderPage = ({ gender }) => {
     }
   }, [showCart]);
 
+  const handleCloseCart = () => {
+    setShowCart(false);
+    document.body.style.overflow = 'auto';
+  };
+
   return (
     <>
       <Filter />
       <main className='main'>
         <Hero gender={gender} />
       </main>
+      {/* {showBuy && (
+        <>
+          <BuyNow />
+          <div className="cover" onClick={handleCloseCart}></div>
+        </>
+      )} */}
       {showCart && (
         <>
           <ShopCart />
