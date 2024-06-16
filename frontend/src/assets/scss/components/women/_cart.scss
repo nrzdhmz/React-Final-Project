@@ -7,21 +7,62 @@
   right: 0; 
   background-color: white;
   z-index: 13000; 
-  padding: 24px 0  21px 24px;
+  padding: 24px 24px  21px 24px;
   .cart-products{
     display: flex;
     flex-direction: column;
     gap: 20px;
     .cart-product{
+      border-bottom: solid 1px rgb(227, 227, 227);
       display: flex;
-      img{
-        width: 150px;
+      .img{
+        height:200px;
+        position: relative;
+        .trash{
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          font-size: 1rem;
+          cursor: pointer;
+        }
+        img{
+          width: 140px;
+          height: 90%;
+          background-position: center center;
+          background-size: cover;
+        }
       }
       .cart-info{
         margin: 0 0 0 15px;
         display: flex;
         flex-direction: column;
+        .size{
+          margin-top: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        p{
+          font-size: 0.875rem;
+          line-height: 1;
+          letter-spacing: .5px;
+          padding-left: 5px;
+        }
+        }
+        .price{
+          padding: 20px 0 0 5px;
+          font-size: 0.875rem;
+          line-height: 1.12;
+          letter-spacing: .5px;
+        }
+        .name{
+          font-size: 0.875rem;
+          line-height: 1.125rem;
+          letter-spacing: .5px;
+          margin-top: 10px;
+          padding-left: 5px;
+        }
         .head{
+          padding-left: 0px;
           font-size: .75rem;
           line-height: 1.12;
           letter-spacing: .5px;
@@ -32,6 +73,7 @@
   }
   .cart-header{
     top: -25px;
+    z-index: 10343;
     position: sticky;
     align-items: center;
     display: flex;
