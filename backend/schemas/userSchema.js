@@ -5,8 +5,8 @@ const userSchema = joi.object({
   password: joi.string().required(),
   confirmPassword: joi.equal(joi.ref("password")),
   title: joi.string().valid("Mr.", "Mrs.").required(),
-  firstName: joi.string().min(4).max(15).required(),
-  lastName: joi.string().min(4).max(15).required(),
+  firstName: joi.string().min(4).max(15),
+  lastName: joi.string().min(4).max(15),
 });
 
 export default userSchema;
