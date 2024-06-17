@@ -56,7 +56,7 @@ export const loginController = async (req, res) => {
     });
     if (!existingUser)
       return res.status(400).json({ error: "Invalid credentials" });
-    if (!compare(userData.password, existingUser.password))
+    if (!(await compare(userData.password, existingUser.password)))
       return res.status(400).json({ error: "Invalid credentials" });
     const token = jwt.sign(existingUser.id, process.env.JWT_SECRET);
     res.cookie("token", token, {
@@ -123,7 +123,7 @@ export const updateUserController = async (req, res) => {
         email: userData.email ? userData.email : user.email,
         firstName: userData.firstName ? userData.firstName : user.firstName,
         lastName: userData.lastName ? userData.lastName : user.lastName,
-        password: userData.newPassword ? userData.newPassword : user.password,
+        password: userData.newPassword,
       },
     });
     if (updatedUser)
