@@ -1,16 +1,14 @@
-import React from 'react'
-import Footer from '../components/common_components/Footer'
-import Recap from '../components/profile/Recap';
-
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import Footer from '../components/common_components/Footer';
 
 const Profile = () => {
-
   return (
     <main>
-      <Recap/>
-      <Footer/>
+      <Outlet />
+      <Footer />
     </main>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

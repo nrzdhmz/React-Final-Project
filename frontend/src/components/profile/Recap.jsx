@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import profilepic from "../../assets/images/profilepic.webp";
 import { useAuth } from '../../context/authContext';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import ProfileForm from './ProfileForm';
+import ProfileDetails from './ProfileDetails';
 
 const Recap = () => {
   const { user, setUser } = useAuth();
+  const { id } = useParams(); // Get the user ID from the URL
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({
     title: user?.title,
@@ -29,10 +32,9 @@ const Recap = () => {
     try {
       const response = await axios.put('http://localhost:5000/api/user', formData, { withCredentials: true });
       console.log(response);
-      setUser(response);
-      setEditing(false); 
+      setUser(response.data);
+      setEditing(false);
     } catch (error) {
-      console.log(formData);
       console.error('Error updating profile', error);
     }
   };
@@ -41,163 +43,40 @@ const Recap = () => {
     <section className='profile-section'>
       <div className="editProfile">
         <div className="profile-top m12 p">
-          <label className='pp'>
-            Welcome,
-          </label>
-          <label className="ppp">
-            {user.firstName}
-          </label>
+          <label className='pp'>Welcome,</label>
+          <label className="ppp">{user.firstName}</label>
         </div>
-        
+
         {editing ? (
-          <form onSubmit={handleSubmit}>
-            <div className="profile-content m26">
-              <label className='pp'>
-                TITLE
-              </label>
-              <input
-                className='ppp'
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            
-            <div className="name">
-              <div className="profile-content m12 w50">
-                <label className='pp'>
-                  FIRST NAME
-                </label>
-                <input
-                  className='ppp'
-                  type="text"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              
-              <div className="profile-content m12">
-                <label className='pp'>
-                  LAST NAME
-                </label>
-                <input
-                  className='ppp'
-                  type="text"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>  
-            </div>
-
-            <div className="profile-content m2">
-              <label className='pp'>
-                EMAIL
-              </label>
-              <input
-                className='ppp'
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            
-            <div className="profile-content m12">
-              <label className='pp'>
-                CURRENT PASSWORD
-              </label>
-              <input
-                className='ppp password'
-                type="password"
-                name="currentPassword"
-                value={formData.currentPassword}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="profile-content m12 p58">
-              <label className='pp'>
-                NEW PASSWORD
-              </label>
-              <input
-                className='ppp password'
-                type="password"
-                name="newPassword"
-                value={formData.newPassword}
-                onChange={handleInputChange}
-              />
-            </div>
-
-            <button className='button' type="submit">
-              Save Profile
-            </button>
-          </form>
+          <ProfileForm
+            formData={formData}
+            handleInputChange={handleInputChange}
+            handleSubmit={handleSubmit}
+          />
         ) : (
-          <>
-            <div className="profile-content m26">
-              <p className='pp'>
-                TITLE
-              </p>
-              <p className="ppp">
-                {formData.title}
-              </p>
-            </div>
-            
-            <div className="name">
-              <div className="profile-content m12">
-                <p className='pp'>
-                  FIRST NAME
-                </p>
-                <p className="ppp">
-                  {formData.firstName}
-                </p>
-              </div>
-              
-              <div className="profile-content m12">
-                <p className='pp'>
-                  LAST NAME
-                </p>
-                <p className="ppp">
-                  {formData.lastName}
-                </p>
-              </div>
-            </div>
-
-            <div className="profile-content m2">
-              <p className='pp'>
-                EMAIL
-              </p>
-              <p className="ppp">
-                {formData.email}
-              </p>
-            </div>
-            
-            <div className="profile-content m12 p58">
-              <p className='pp'>
-                CURRENT PASSWORD
-              </p>
-              <p className="ppp">
-                ●●●●●●●●●
-              </p>
-            </div>
-
-            <button className='button' onClick={() => setEditing(true)}>
-              <Link>
-              Modify Profile
-              </Link>
-            </button>
-          </>
+          <ProfileDetails
+            formData={formData}
+            setEditing={setEditing}
+          />
         )}
       </div>
-      <div className="pages"></div>
+      <div className="pages">
+        <div className="orders">
+          <h2><Link to={`/profile/${id}/orders`}>Orders</Link></h2>
+          <p>Track your orders and discover when they will arrive.</p>
+          <p>You have no order records.</p>
+        </div>
+        <div className="wishlistlink">
+          <h2><Link to={`/profile/${id}/wishlist`}>Wishlist</Link></h2>
+          <p>A section with your favorite items saved.</p>
+        </div>
+        <div className="personal-data">
+          <h2><Link to={`/profile/${id}/personal-data`}>Personal Data</Link></h2>
+          <p>Check all about your preferences, address, and payment settings.</p>
+        </div>
+      </div>
       <div className="picture">
-        <img src={profilepic} alt="" />
+        <img src={profilepic} alt="Profile" />
       </div>
     </section>
   );

@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { IoIosSearch } from "react-icons/io";
 import { AiOutlineShopping } from "react-icons/ai";
+import { IoMdHeartEmpty } from "react-icons/io";
 import Logo from "../../assets/images/Logo.png";
 import DG from "../../assets/images/DG.png";
 import LogoWhite from "../../assets/images/LogoWhite.png";
 import Login from '../auth/Login'; 
 import Filter from './Filter';
 import { useAuth } from '../../context/authContext';
-import { IoMdHeartEmpty } from "react-icons/io";
 
 const Header = () => {
   const { user, setShowCart } = useAuth();
@@ -49,7 +49,7 @@ const Header = () => {
 
   const handleMouseLeave = () => {
     if (isTop) {
-      setLogoSrc(location.pathname !== '/'? Logo : LogoWhite);
+      setLogoSrc(location.pathname !== '/' ? Logo : LogoWhite);
     }
   };
 
@@ -122,7 +122,7 @@ const Header = () => {
                 </li>
                 {user ? (
                   <li className='service-menu-item nav-hover'>
-                    <Link to={`/profile/${user.id}`}>My Account</Link>
+                    <Link to={`/profile/${user.id}/recap`}>My Account</Link>
                   </li>
                 ) : (
                   <li onClick={handleOpenLogin} className='service-menu-item nav-hover'>
@@ -178,20 +178,20 @@ const Header = () => {
                     <Link to={`/profile/${user.id}/recap`}>RECAP</Link>
                   </li>
                   <li className='navigation-item nav-hover'>
-                    <Link to={`/profile/${user.id}/orders`}>ORDERS</Link>
+                    <Link to={`/profile/${user.id}/recap`}>ORDERS</Link>
                   </li>
                   <li className='navigation-item nav-hover'>
                     <Link to={`/profile/${user.id}/wishlist`}>WISHLIST</Link>
                   </li>
                   <li className='navigation-item nav-hover'>
-                    <Link to={`/profile/${user.id}/personal-data`}>PERSONAL DATA</Link>
+                    <Link to={`/profile/${user.id}/recap`}>PERSONAL DATA</Link>
                   </li>
                 </>
               )}
             </ul>
           </nav>
         </div>
-        {(location.pathname === '/women' || location.pathname === '/men') && <Filter/>}
+        {(location.pathname === '/women' || location.pathname === '/men') && <Filter />}
       </div>
     </header>
   );
