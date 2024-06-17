@@ -29,7 +29,7 @@ const Recap = () => {
     try {
       const response = await axios.put('http://localhost:5000/api/user', formData, { withCredentials: true });
       console.log(response);
-      // setUser(response.data);
+      setUser(response);
       setEditing(false); 
     } catch (error) {
       console.log(formData);

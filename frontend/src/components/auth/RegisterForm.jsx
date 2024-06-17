@@ -40,8 +40,8 @@ const RegisterForm = ({ handleToggleView, onClose }) => {
             required
           >
             <option value="" disabled>-</option>
-            <option value="Mr">Mr</option>
-            <option value="Mrs">Mrs</option>
+            <option value="Mr.">Mr.</option>
+            <option value="Mrs.">Mrs.</option>
           </select>
         </div>
         <br />
