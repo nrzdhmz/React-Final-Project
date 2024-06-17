@@ -6,11 +6,14 @@ import {
   updateUserController,
 } from "./../controllers/user.controller.js";
 
+import validateData from "../middleware/validateData.js";
+import userSchema from "../schemas/userSchema.js";
+
 const router = Router();
 
-router.post("/signup", signUpController);
-router.post("/login", loginController);
+router.post("/signup", validateData(userSchema), signUpController);
+router.post("/login", validateData(userSchema), loginController);
 router.post("/logout", logoutController);
-router.put("/", updateUserController);
+router.put("/", validateData(userSchema), updateUserController);
 
 export default router;

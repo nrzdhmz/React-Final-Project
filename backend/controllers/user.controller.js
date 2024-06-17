@@ -87,12 +87,10 @@ export const logoutController = (req, res) => {
   return res.status(200).json({ message: "Logged out successsfully" });
 };
 
-
-
 /**
- * 
- * @param {import("express").Request} req 
- * @param {import("express").Response} res 
+ *
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
  */
 export const updateUserController = async (req, res) => {
   try {
@@ -103,37 +101,37 @@ export const updateUserController = async (req, res) => {
 
     if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-
-
     const user = await prisma.user.findFirst({
       where: {
         id: userId,
-      }
-    })
-    if (!user) return res.status(404).json({ error: "User not found" })
+      },
+    });
+    if (!user) return res.status(404).json({ error: "User not found" });
 
     const { body: userData } = req;
 
-    if (userData.password !== userData.confirmPassword) return res.status(400).json({ error: "Passwords do not match" })
-
+    if (compare(userData.password, user.password)) {
+      userData.newPassword = await hash(userData.newPassword, saltRounds);
+    } else {
+      return res.status(400).json({ error: "Invalid password" });
+    }
 
     const updatedUser = await prisma.user.update({
       where: {
-        id: userId
+        id: userId,
       },
       data: {
-        title: userData.title ? userData.title : user.title,
+        email: userData.email ? userData.email : user.email,
         firstName: userData.firstName ? userData.firstName : user.firstName,
         lastName: userData.lastName ? userData.lastName : user.lastName,
-        email: userData.email ? userData.email : user.email,
-        password: userData.password ? await hash(userData.password, saltRounds) : user.password
-      }
-    })
-    if (updatedUser) return res.status(200).json({ message: "User updated successfully" })
+        password: userData.newPassword ? userData.newPassword : user.password,
+      },
+    });
+    if (updatedUser)
+      return res.status(200).json({ message: "User updated successfully" });
 
-    return res.status(400).json({ error: "Bad request" })
-
+    return res.status(400).json({ error: "Bad request" });
   } catch (err) {
     handleError(err, res);
   }
-}
+};
