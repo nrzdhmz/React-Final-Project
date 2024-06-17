@@ -32,7 +32,7 @@ const Recap = () => {
     try {
       const response = await axios.put('http://localhost:5000/api/user', formData, { withCredentials: true });
       console.log(response);
-      setUser(response.data);
+      setUser(formData); 
       setEditing(false);
     } catch (error) {
       console.error('Error updating profile', error);
@@ -55,7 +55,7 @@ const Recap = () => {
           />
         ) : (
           <ProfileDetails
-            formData={formData}
+            formData={formData} 
             setEditing={setEditing}
           />
         )}

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { heroData } from '../data/HeroData'
 
 const Hero = () => {
+
   return (
     <section className='hero-section section'>
       {heroData.map((item, index) => (
