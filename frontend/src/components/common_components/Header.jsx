@@ -75,7 +75,7 @@ const Header = () => {
 
   return (
     <header
-      className={`header ${scrolled ? 'scrolled' : ''} ${location.pathname !== '/' ? 'header-white' : 'header-black'}`}
+      className={`header ${scrolled ? 'scrolled' : ''} ${location.pathname !== '/' ? 'header-white' : 'header-black'} ${location.pathname.startsWith('/profile/') ? 'profile-header' : ''}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

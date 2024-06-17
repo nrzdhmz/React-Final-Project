@@ -8,18 +8,19 @@
     width: 100%;
     border-bottom: 1px solid gray;
     sup{
+      margin-left: 3px;
       font-size: 12px;
     }
   }
   .cart-products{
     padding: 60px 0 30px;
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
+    gap: 16px;
     .cart-product{
       display: flex;
       flex-direction: column;
-      width: 24%;
+      width: calc(25% - 12px);
       height: 100%;
       padding-bottom: 60px;
       .img{

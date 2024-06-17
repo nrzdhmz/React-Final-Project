@@ -8,7 +8,7 @@ import ProfileDetails from './ProfileDetails';
 
 const Recap = () => {
   const { user, setUser } = useAuth();
-  const { id } = useParams(); // Get the user ID from the URL
+  const { id } = useParams();
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({
     title: user?.title,
@@ -61,8 +61,8 @@ const Recap = () => {
         )}
       </div>
       <div className="pages">
-        <div className="orders">
-          <h2><Link to={`/profile/${id}/orders`}>Orders</Link></h2>
+        <div className="wishlistlink">
+          <h2><Link to={`/profile/${id}/recap`}>Orders</Link></h2>
           <p>Track your orders and discover when they will arrive.</p>
           <p>You have no order records.</p>
         </div>
@@ -70,8 +70,8 @@ const Recap = () => {
           <h2><Link to={`/profile/${id}/wishlist`}>Wishlist</Link></h2>
           <p>A section with your favorite items saved.</p>
         </div>
-        <div className="personal-data">
-          <h2><Link to={`/profile/${id}/personal-data`}>Personal Data</Link></h2>
+        <div className="wishlistlink">
+          <h2><Link to={`/profile/${id}/recap`}>Personal Data</Link></h2>
           <p>Check all about your preferences, address, and payment settings.</p>
         </div>
       </div>

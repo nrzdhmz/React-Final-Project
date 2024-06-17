@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { CgClose } from "react-icons/cg";
 import { IoMdHeart } from "react-icons/io";
 import { AiOutlineShopping } from "react-icons/ai";
 import { useAuth } from '../../context/authContext';
@@ -34,7 +33,7 @@ const Wishlist = () => {
     <div className={`wishlist`}>
       <h2>
         Wishlist
-        <sup>11</sup>
+        <sup>{likedProducts.length}</sup>
       </h2>
       <div className="cart-products">
         {likedProducts.map(product => (
