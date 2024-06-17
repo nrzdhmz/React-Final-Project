@@ -15,7 +15,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/women" element={<GenderPage gender="women" />} />
           <Route path="/men" element={<GenderPage gender="men" />} />
-          <Route path="/profile" element={<Profile/>} />
+          <Route path="/profile/:id" element={<Profile/>} />
         </Routes>
       </AuthProvider>
     </Router>

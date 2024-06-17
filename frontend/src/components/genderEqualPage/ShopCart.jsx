@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { CgClose } from "react-icons/cg";
 import { FaRegTrashCan } from "react-icons/fa6";
-import { useAuth } from '../../context/authContext'; 
+import { AiOutlineShopping } from "react-icons/ai";
+import { useAuth } from '../../context/authContext';
+import { Link } from 'react-router-dom';
 
 const ShopCart = () => {
-  const { showCart, setShowCart, getlikeProducts, removeLikeProduct } = useAuth(); 
+  const { showCart, setShowCart, getlikeProducts, removeLikeProduct, addToCart } = useAuth(); 
   const [likedProducts, setLikedProducts] = useState([]);
 
   useEffect(() => {
@@ -18,12 +20,13 @@ const ShopCart = () => {
     fetchLikedProducts();
   }, [getlikeProducts]);
 
-  const handleRemoveProduct = async (productId) => {
+  const handleAddToCartAndRemove = async (product) => {
     try {
-      await removeLikeProduct(productId);
+      await addToCart(product);
+      await removeLikeProduct(product.id);
       setLikedProducts(await getlikeProducts());
     } catch (error) {
-      console.error('Error removing liked product:', error);  
+      console.error('Error processing the product:', error);
     }
   };
 
@@ -37,11 +40,11 @@ const ShopCart = () => {
         {likedProducts.map(product => (
           <div key={product.id} className="cart-product">
             <div className="img">
-              <FaRegTrashCan 
-                className='trash' 
-                onClick={() => handleRemoveProduct(product.id)}
+              <FaRegTrashCan
+                className='trash'
+                onClick={() => handleAddToCartAndRemove(product)}
               />
-              <img src={`http://localhost:5000/static/${product.imageUrl}`} alt={product.name} />              
+              <img src={`http://localhost:5000/static/${product.imageUrl}`} alt={product.name} />
             </div>
             <div className="cart-info">
               <p className='head'>NEW COLLECTION</p>
@@ -51,6 +54,10 @@ const ShopCart = () => {
                 <p>Color: Print</p>
                 <p>Size: 40</p>
               </div>
+              <button className='button' onClick={() => handleAddToCartAndRemove(product)}>
+                <AiOutlineShopping className='idk' />
+                <Link>Add to cart</Link>
+              </button>
             </div>
           </div>
         ))}

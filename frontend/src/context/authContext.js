@@ -57,6 +57,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const addToCart = async (product) => {
+    try {
+      await axios.post('http://localhost:5000/api/cart', product, { withCredentials: true });
+    } catch (error) {
+      console.log('Error adding to cart:', error);
+    }
+  };
+
   const authData = {
     user,
     login,
@@ -64,6 +72,7 @@ export const AuthProvider = ({ children }) => {
     likeProduct,
     removeLikeProduct,
     getlikeProducts,
+    addToCart,
     likeAttempt, 
     setLikeAttempt, 
     showCart,
