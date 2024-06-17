@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import profilepic from "../../assets/images/profilepic.webp";
 import { useAuth } from '../../context/authContext';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const Recap = () => {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({
-    title: user.title,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
-    currentPassword: '', // Assuming you'll add functionality to update password
+    title: user?.title || '',
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    email: user?.email || '',
+    currentPassword: '',
     newPassword: ''
   });
 
@@ -23,12 +24,17 @@ const Recap = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add functionality to update user information
-    // You can use formData to update user data via API or context
-    // Example: updateUserData(formData);
-    setEditing(false); // Assuming update is successful and editing is done
+    try {
+      const response = await axios.put('http://localhost:5000/api/user', formData, { withCredentials: true });
+      console.log(response);
+      // setUser(response.data);
+      setEditing(false); 
+    } catch (error) {
+      console.log(formData);
+      console.error('Error updating profile', error);
+    }
   };
 
   return (
@@ -60,7 +66,7 @@ const Recap = () => {
             </div>
             
             <div className="name">
-              <div className="profile-content m12">
+              <div className="profile-content m12 w50">
                 <label className='pp'>
                   FIRST NAME
                 </label>
@@ -103,15 +109,27 @@ const Recap = () => {
               />
             </div>
             
-            <div className="profile-content m12 p58">
+            <div className="profile-content m12">
               <label className='pp'>
                 CURRENT PASSWORD
               </label>
               <input
-                className='ppp'
+                className='ppp password'
                 type="password"
                 name="currentPassword"
                 value={formData.currentPassword}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="profile-content m12 p58">
+              <label className='pp'>
+                NEW PASSWORD
+              </label>
+              <input
+                className='ppp password'
+                type="password"
+                name="newPassword"
+                value={formData.newPassword}
                 onChange={handleInputChange}
               />
             </div>
@@ -163,9 +181,9 @@ const Recap = () => {
             </div>
             
             <div className="profile-content m12 p58">
-              <performance className='pp'>
+              <p className='pp'>
                 CURRENT PASSWORD
-              </performance>
+              </p>
               <p className="ppp">
                 ●●●●●●●●●
               </p>
