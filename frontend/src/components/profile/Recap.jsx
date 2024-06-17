@@ -8,10 +8,10 @@ const Recap = () => {
   const { user, setUser } = useAuth();
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({
-    title: user?.title || '',
-    firstName: user?.firstName || '',
-    lastName: user?.lastName || '',
-    email: user?.email || '',
+    title: user?.title,
+    firstName: user?.firstName,
+    lastName: user?.lastName,
+    email: user?.email,
     currentPassword: '',
     newPassword: ''
   });
