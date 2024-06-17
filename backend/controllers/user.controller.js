@@ -110,14 +110,21 @@ export const updateUserController = async (req, res) => {
 
     const { body: userData } = req;
 
-    delete userData.confirmPassword;
+    if (compare(userData.password, user.password)) {
+      userData.newPassword = await hash(userData.newPassword, saltRounds);
+    } else {
+      return res.status(400).json({ error: "Invalid password" });
+    }
 
     const updatedUser = await prisma.user.update({
       where: {
         id: userId,
       },
       data: {
-        ...userData,
+        email: userData.email ? userData.email : user.email,
+        firstName: userData.firstName ? userData.firstName : user.firstName,
+        lastName: userData.lastName ? userData.lastName : user.lastName,
+        password: userData.newPassword ? userData.newPassword : user.password,
       },
     });
     if (updatedUser)
