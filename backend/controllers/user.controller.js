@@ -24,7 +24,6 @@ export const signUpController = async (req, res) => {
         .json({ error: "User already exists with that email" });
 
     const hashedPassword = await hash(userData.password, saltRounds);
-    console.log(`hashed: ${hashedPassword}`);
     const user = await prisma.user.create({
       data: { ...userData, password: hashedPassword },
     });
@@ -110,7 +109,7 @@ export const updateUserController = async (req, res) => {
 
     const { body: userData } = req;
 
-    if (compare(userData.password, user.password)) {
+    if (compare(userData.currentPassword, user.password)) {
       userData.newPassword = await hash(userData.newPassword, saltRounds);
     } else {
       return res.status(400).json({ error: "Invalid password" });

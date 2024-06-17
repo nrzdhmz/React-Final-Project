@@ -135,9 +135,7 @@ const Recap = () => {
             </div>
 
             <button className='button' type="submit">
-              <Link>
               Save Profile
-              </Link>
             </button>
           </form>
         ) : (
