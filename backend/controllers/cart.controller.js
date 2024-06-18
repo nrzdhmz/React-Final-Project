@@ -13,15 +13,13 @@ export const addToCartController = async (req, res) => {
     const { token } = req.cookies;
     const userId = Number(jwt.verify(token, process.env.JWT_SECRET));
     if (!userId) return res.status(401).json({ error: "Unauthorized" });
-    let { productId, quantity } = req.body;
+    let { productId } = req.body;
     productId = Number(productId);
-    quantity = Number(quantity);
     const product = await prisma.product.findFirst({
       where: {
         id: productId,
       },
     });
-    if (!quantity) quantity = 1;
     if (!product) return res.status(404).json({ error: "Product not found" });
     let cart = await prisma.cart.findFirst({
       where: {
@@ -34,23 +32,33 @@ export const addToCartController = async (req, res) => {
           userId,
         },
       });
-    if (
-      await prisma.productItem.findFirst({
-        where: {
-          cartId: cart.id,
-          productId,
-        },
-      })
-    )
-      return res.status(400).json({ error: "Product already in cart" });
-    await prisma.productItem.create({
-      data: {
-        count: quantity,
+
+    const existingProduct = await prisma.productItem.findFirst({
+      where: {
         cartId: cart.id,
-        productId: product.id,
+        productId,
       },
     });
-    return res.status(200).json({ message: "Product added to cart" });
+
+    if (!existingProduct) {
+      await prisma.productItem.create({
+        data: {
+          cartId: cart.id,
+          productId: product.id,
+        },
+      });
+      return res.status(200).json({ message: "Product added to cart" });
+    }
+    existingProduct.count = existingProduct.count + 1;
+    await prisma.productItem.update({
+      where: {
+        id: existingProduct.id,
+      },
+      data: {
+        count: existingProduct.count,
+      },
+    });
+    return res.status(200).json({ message: "Product count increased" });
   } catch (err) {
     handleError(err, res);
   }
@@ -181,52 +189,6 @@ export const decreaseQuantityController = async (req, res) => {
       },
     });
     return res.status(200).json({ message: "Product quantity decreased" });
-  } catch (err) {
-    handleError(err, res);
-  }
-};
-
-/**
- *
- * @param {import("express").Request} req
- * @param {import("express").Response} res
- */
-export const increaseQuantityController = async (req, res) => {
-  try {
-    const { token } = req.cookies;
-    const userId = Number(jwt.verify(token, process.env.JWT_SECRET));
-    if (!userId) return res.status(401).json({ error: "Unauthorized" });
-    let { id: productId } = req.params;
-    productId = Number(productId);
-    const product = await prisma.product.findFirst({
-      where: {
-        id: productId,
-      },
-    });
-    if (!product) return res.status(404).json({ error: "Product not found" });
-    const cart = await prisma.cart.findFirst({
-      where: {
-        userId,
-      },
-    });
-    if (!cart) return res.status(404).json({ error: "Cart not found" });
-    const productItem = await prisma.productItem.findFirst({
-      where: {
-        cartId: cart.id,
-        productId,
-      },
-    });
-    if (!productItem)
-      return res.status(404).json({ error: "Product not found in cart" });
-    await prisma.productItem.update({
-      where: {
-        id: productItem.id,
-      },
-      data: {
-        count: productItem.count + 1,
-      },
-    });
-    return res.status(200).json({ message: "Product quantity increased" });
   } catch (err) {
     handleError(err, res);
   }
