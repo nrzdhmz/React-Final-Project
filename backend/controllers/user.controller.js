@@ -24,7 +24,6 @@ export const signUpController = async (req, res) => {
         .json({ error: "User already exists with that email" });
 
     const hashedPassword = await hash(userData.password, saltRounds);
-    console.log(`hashed: ${hashedPassword}`);
     const user = await prisma.user.create({
       data: { ...userData, password: hashedPassword },
     });
@@ -57,7 +56,7 @@ export const loginController = async (req, res) => {
     });
     if (!existingUser)
       return res.status(400).json({ error: "Invalid credentials" });
-    if (!compare(userData.password, existingUser.password))
+    if (!(await compare(userData.password, existingUser.password)))
       return res.status(400).json({ error: "Invalid credentials" });
     const token = jwt.sign(existingUser.id, process.env.JWT_SECRET);
     res.cookie("token", token, {
@@ -85,4 +84,53 @@ export const loginController = async (req, res) => {
 export const logoutController = (req, res) => {
   req.cookies.token = null;
   return res.status(200).json({ message: "Logged out successsfully" });
+};
+
+/**
+ *
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ */
+export const updateUserController = async (req, res) => {
+  try {
+    const { token } = req.cookies;
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+    const userId = Number(jwt.verify(token, process.env.JWT_SECRET));
+
+    if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const { body: userData } = req;
+
+    if (compare(userData.currentPassword, user.password)) {
+      userData.newPassword = await hash(userData.newPassword, saltRounds);
+    } else {
+      return res.status(400).json({ error: "Invalid password" });
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        email: userData.email ? userData.email : user.email,
+        firstName: userData.firstName ? userData.firstName : user.firstName,
+        lastName: userData.lastName ? userData.lastName : user.lastName,
+        password: userData.newPassword,
+      },
+    });
+    if (updatedUser)
+      return res.status(200).json({ message: "User updated successfully" });
+
+    return res.status(400).json({ error: "Bad request" });
+  } catch (err) {
+    handleError(err, res);
+  }
 };

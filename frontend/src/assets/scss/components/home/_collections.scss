@@ -8,8 +8,14 @@
   flex-wrap: wrap;
   gap: 30px;
   background-color: #F3F3F3;
+  @media (max-width: 991px) {
+    padding: 40px 60px;
+  }
   .collection-h2{
     padding: 0 0 70px;
+    @media (max-width: 991px) {
+      padding: 0 0 10px;
+    }
   }
   p{
     font-size: 15px;

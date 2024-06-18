@@ -7,6 +7,10 @@
   border-top: 0.5px solid rgb(191, 191, 191);
   border-bottom: 0.5px solid rgb(191, 191, 191);
   bottom: -71px;
+  @media (max-width: 991px) {
+    bottom: -51px;
+    padding: 8px 14px;
+  }
   .active{
     position: relative;
     &::after{
@@ -25,6 +29,9 @@
       font-size: .75rem;
       border: none;
       background: transparent;
+      @media (max-width: 991px) {
+        padding: 10px;
+      }
     }
   }
 }

@@ -3,8 +3,16 @@
   color: white;
   padding-left: 90px;
   padding-bottom: 150px;
+  @media (max-width: 991px) {
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 40px;
+  }
   h2{
     margin: 95px 0;
+    @media (max-width: 991px) {
+      margin: 40px 0;
+    }
   }
 }
 .swiper-item{
@@ -14,12 +22,17 @@
   .swiper-img-wrapper{
     width: 100%;
     img{
-      background-position: center center;
-      min-width: 576px;
+      min-width: 476px;
       max-width: 767px;
       height: 100%;
       height: 500px;
       background-size: cover;
+      background-position: center center;
+      @media (max-width: 991px) {
+        height: 400px;
+        width: 100%!important;
+        object-fit: cover;
+      }
     }
   }
 }

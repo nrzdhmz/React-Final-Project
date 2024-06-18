@@ -10,7 +10,8 @@ export const heroData = [
     title: "WOMEN'S MAIOLICA COLLECTION FW24",
     description: "A stylish tribute to the art of majolica in the new Lemon Yellow shade.",
     linkTexts: ["SHOP THE COLLECTION"],
-    width: "w-50"
+    width: "w-50",
+    link: "/women"
   },
   {
     imgSrc: MenImg,
@@ -19,6 +20,7 @@ export const heroData = [
     description: "A stylish tribute to the art of majolica in the new Lemon Yellow shade.",
     linkTexts: ["SHOP THE COLLECTION"],
     width: "w-50",
+    link: "/men"
   },
   {
     imgSrc: Sandals,
