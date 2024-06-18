@@ -22,7 +22,7 @@ const ShopCart = () => {
 
   const handleAddToCartAndRemove = async (product) => {
     try {
-      await addToCart({ productId: product.id});
+      await addToCart({ productId: product.id, quantity: 1 });
       await removeLikeProduct(product.id);  
       setLikedProducts(await getlikeProducts());
     } catch (error) {
