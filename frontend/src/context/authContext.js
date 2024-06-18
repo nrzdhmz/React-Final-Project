@@ -9,18 +9,54 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [likeAttempt, setLikeAttempt] = useState(false); 
-  const [showCart, setShowCart] = useState(false); 
+  const [likeAttempt, setLikeAttempt] = useState(false);
+  const [showCart, setShowCart] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       setUser(parsedUser);
-      console.log('Stored user:', parsedUser);
     }
+    fetchCartItems();
   }, []);
-  
+
+  const fetchCartItems = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/cart', { withCredentials: true });
+      setCartItems(response.data);
+    } catch (error) {
+      console.error('Error fetching cart items:', error);
+    }
+  };
+
+  const handleAddToCart = async (id) => {
+    try {
+      await axios.post('http://localhost:5000/api/cart', { productId: id }, { withCredentials: true });
+      fetchCartItems();
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    }
+  };
+
+  const handleDecreaseQuantity = async (id) => {
+    try {
+      await axios.put(`http://localhost:5000/api/cart/${id}`, {}, { withCredentials: true });
+      fetchCartItems();
+    } catch (error) {
+      console.error('Error decreasing quantity:', error);
+    }
+  };
+
+  const handleRemoveFromCart = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/cart/${id}`, { withCredentials: true });
+      fetchCartItems();
+    } catch (error) {
+      console.error('Error removing from cart:', error);
+    }
+  };
 
   const login = async (email, password) => {
     try {
@@ -44,8 +80,8 @@ export const AuthProvider = ({ children }) => {
 
   const likeProduct = async (productId) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/product/like/${productId}`, {}, { withCredentials: true });
-      setShowCart(true)
+      await axios.put(`http://localhost:5000/api/product/like/${productId}`, {}, { withCredentials: true });
+      setShowCart(true);
     } catch (error) {
       console.log(error);
     }
@@ -53,7 +89,7 @@ export const AuthProvider = ({ children }) => {
 
   const removeLikeProduct = async (productId) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/product/like/${productId}`, { withCredentials: true });
+      await axios.delete(`http://localhost:5000/api/product/like/${productId}`, { withCredentials: true });
     } catch (error) {
       console.log(error);
     }
@@ -61,7 +97,7 @@ export const AuthProvider = ({ children }) => {
 
   const getlikeProducts = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/product/like`, { withCredentials: true });
+      const response = await axios.get('http://localhost:5000/api/product/like', { withCredentials: true });
       return response.data;
     } catch (error) {
       console.log('Error getting products:', error);
@@ -72,11 +108,12 @@ export const AuthProvider = ({ children }) => {
   const addToCart = async (product) => {
     try {
       const response = await axios.post('http://localhost:5000/api/cart', product, { withCredentials: true });
-      console.log(response);
+      fetchCartItems();
     } catch (error) {
       console.log('Error adding to cart:', error);
     }
   };
+  
 
   const logout = () => {
     setUser(null);
@@ -92,11 +129,16 @@ export const AuthProvider = ({ children }) => {
     removeLikeProduct,
     getlikeProducts,
     addToCart,
-    likeAttempt, 
-    setLikeAttempt, 
+    likeAttempt,
+    setLikeAttempt,
     showCart,
     setShowCart,
-    logout, // Include the logout function
+    logout,
+    cartItems,
+    fetchCartItems,
+    handleAddToCart,
+    handleDecreaseQuantity,
+    handleRemoveFromCart,
   };
 
   return (

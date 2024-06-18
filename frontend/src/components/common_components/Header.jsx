@@ -12,7 +12,7 @@ import HeaderNavigation from './HeaderNavigation';
 import Cart from '../genderEqualPage/Cart';
 
 const Header = () => {
-  const { user, setShowCart, logout } = useAuth();
+  const { setShowCart, logout } = useAuth();
   const [logoSrc, setLogoSrc] = useState(LogoWhite);
   const [scrolled, setScrolled] = useState(false);
   const [isTop, setIsTop] = useState(true);
@@ -85,10 +85,6 @@ const Header = () => {
     logout();
     window.location.href = '/';   
   };
-
-  useEffect(() => {
-    console.log('User Data:', user); 
-  }, [user]);
 
   return (
     <header

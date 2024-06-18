@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const Wishlist = () => {
   const { getlikeProducts, removeLikeProduct, addToCart } = useAuth(); 
   const [likedProducts, setLikedProducts] = useState([]);
-
+ 
   useEffect(() => {
     const fetchLikedProducts = async () => {
       try {
@@ -21,7 +21,7 @@ const Wishlist = () => {
 
   const handleAddToCartAndRemove = async (product) => {
     try {
-      await addToCart(product);
+      await addToCart({ productId: product.id});
       await removeLikeProduct(product.id);
       setLikedProducts(await getlikeProducts());
     } catch (error) {
