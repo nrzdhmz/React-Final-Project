@@ -34,7 +34,7 @@ model ProductItem {
   productId Int
   product   Product @relation(fields: [productId], references: [id])
   cartId    Int
-  count     Int
+  count     Int     @default(1)
 }
 
 model Product {
