@@ -8,6 +8,9 @@
   background-color: white;
   z-index: 13000; 
   padding: 24px 24px  21px 24px;
+  @media (max-width: 576px) {
+    width: 100%;
+  }
   .cart-products{
     display: flex;
     flex-direction: column;

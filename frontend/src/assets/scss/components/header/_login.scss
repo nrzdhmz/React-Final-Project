@@ -10,8 +10,15 @@
   color: black!important;
   display: flex;
   flex-direction: column;
+  @media (max-width: 991px) {
+    padding: 0 24px;
+    width: 100%;
+  }
   .account-info{
     margin: 40px 0;
+    @media (max-width: 991px) {
+      margin: 10px 0;
+    }
     h2{
       font-size: 1rem;
       line-height: 1.5;
@@ -115,6 +122,9 @@
         line-height: 2rem;
         letter-spacing: .5px;
         font-size: .75rem;
+        @media (max-width: 991px) {
+          margin: 0;
+        }
       }
       input{
         border: none;
@@ -135,6 +145,9 @@
   text-decoration: underline;
   font-size: 0.75rem;
   color: rgb(82, 82, 82);
+  @media (max-width: 991px) {
+    right: 28px;
+  }
 }
 .right{
   width: 100%;
@@ -147,6 +160,9 @@
   right: 80px;
   font-size: 1.5rem;
   cursor: pointer;
+  @media (max-width: 991px) {
+    right: 24px;
+  }
 }
 .cover {
   position: absolute;
@@ -167,7 +183,18 @@
     color: white!important;
     background-color: black!important;
   }
+  @media (max-width: 991px) {
+    margin: 15px 0 30px!important;
+  }
 }
 .mb20{
   margin:  0!important;
+}
+.cla{
+  position: absolute;
+  right: 80px;
+  bottom: 100px;
+  @media (max-width: 991px) {
+    right: 24px;
+  }
 }

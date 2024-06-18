@@ -100,7 +100,7 @@ const RegisterForm = ({ handleToggleView, onClose }) => {
             </li>
           </ul>
         </div>
-        <button className='auth right' type="submit">
+        <button className='auth right cla' type="submit">
           Create Account
         </button>
       </form>

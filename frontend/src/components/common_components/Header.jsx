@@ -105,7 +105,7 @@ const Header = () => {
         </>
       )}
       <div className="header-container">
-        <HeaderTop handleOpenLogin={handleOpenLogin} handleLogout={handleLogout} handleOpenCart={handleOpenCart} location={location} setShowCart={setShowCart} />
+        <HeaderTop isTop={isTop} handleOpenLogin={handleOpenLogin} handleLogout={handleLogout} handleOpenCart={handleOpenCart} location={location} setShowCart={setShowCart} />
         <HeaderLogo logoSrc={logoSrc} logoHeight={logoHeight} isTop={isTop} location={location} />
         <HeaderNavigation location={location} />
         {(location.pathname === '/women' || location.pathname === '/men') && <Filter />}
