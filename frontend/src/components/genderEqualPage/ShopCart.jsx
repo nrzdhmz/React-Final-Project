@@ -22,8 +22,8 @@ const ShopCart = () => {
 
   const handleAddToCartAndRemove = async (product) => {
     try {
-      await addToCart(product);
-      await removeLikeProduct(product.id);
+      await addToCart({ productId: product.id});
+      await removeLikeProduct(product.id);  
       setLikedProducts(await getlikeProducts());
     } catch (error) {
       console.error('Error processing the product:', error);

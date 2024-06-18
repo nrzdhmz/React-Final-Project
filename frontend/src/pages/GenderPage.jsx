@@ -4,7 +4,7 @@ import Filter from '../components/common_components/Filter';
 import Hero from '../components/genderEqualPage/Hero';
 import ShopCart from '../components/genderEqualPage/ShopCart';
 import { useAuth } from '../context/authContext';
-import BuyNow from '../components/genderEqualPage/BuyNow';
+import Cart from '../components/genderEqualPage/Cart';
 
 const GenderPage = ({ gender }) => {
   const { showCart, setShowCart } = useAuth();
@@ -28,12 +28,6 @@ const GenderPage = ({ gender }) => {
       <main className='main'>
         <Hero gender={gender} />
       </main>
-      {/* {showBuy && (
-        <>
-          <BuyNow />
-          <div className="cover" onClick={handleCloseCart}></div>
-        </>
-      )} */}
       {showCart && (
         <>
           <ShopCart />

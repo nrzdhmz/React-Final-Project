@@ -1,0 +1,48 @@
+.shopcart{
+  position: absolute;
+  width: 50%;
+  right: 0;
+  height: 100vh;
+  z-index: 10001;
+  background-color: white;
+  top: 0;
+  padding: 80px 32px 21px 54px;
+  color: black!important;
+  display: flex;
+  flex-direction: column;
+  .bag{
+    font-size: 16px;
+    line-height: 1.1875rem;
+    letter-spacing: .04rem;
+    padding-inline-end: .75rem;
+    padding-right: 12px;
+    span{
+      font-size: .5625rem;
+      line-height: 1.12;
+      letter-spacing: .5px;
+      inset-inline-start: auto;
+      inset-inline-end: 0;
+    }
+  }
+  .items{
+    padding-block-start: 0;
+    padding-inline-end: 1.25rem;
+    padding-block-end: 0;
+    padding-inline-start: 0;
+    margin-block-start: 2.8125rem;
+    margin-inline-end: -.125rem;
+    margin-block-end: 2.1875rem;
+    margin-inline-start: 0;
+    width: calc(100% + 1.25rem);
+    position: relative;
+    overflow-y: auto;
+    z-index: 10;
+  }
+  .closed{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+}

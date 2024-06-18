@@ -71,10 +71,16 @@ export const AuthProvider = ({ children }) => {
 
   const addToCart = async (product) => {
     try {
-      await axios.post('http://localhost:5000/api/cart', product, { withCredentials: true });
+      const response = await axios.post('http://localhost:5000/api/cart', product, { withCredentials: true });
+      console.log(response);
     } catch (error) {
       console.log('Error adding to cart:', error);
     }
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('user');
   };
 
   const authData = {
@@ -90,6 +96,7 @@ export const AuthProvider = ({ children }) => {
     setLikeAttempt, 
     showCart,
     setShowCart,
+    logout, // Include the logout function
   };
 
   return (
