@@ -1,6 +1,5 @@
 import prisma from "../prismaClient/index.js";
 import handleError from "../utils/handleError.js";
-import jwt from "jsonwebtoken";
 
 /**
  *
@@ -10,9 +9,8 @@ import jwt from "jsonwebtoken";
  */
 export const addToCartController = async (req, res) => {
   try {
-    const { token } = req.cookies;
-    const userId = Number(jwt.verify(token, process.env.JWT_SECRET));
-    if (!userId) return res.status(401).json({ error: "Unauthorized" });
+    const { user } = req;
+
     let { productId } = req.body;
     productId = Number(productId);
     const product = await prisma.product.findFirst({
@@ -23,13 +21,13 @@ export const addToCartController = async (req, res) => {
     if (!product) return res.status(404).json({ error: "Product not found" });
     let cart = await prisma.cart.findFirst({
       where: {
-        userId,
+        userId: user.id,
       },
     });
     if (!cart)
       cart = await prisma.cart.create({
         data: {
-          userId,
+          userId: user.id,
         },
       });
 
@@ -66,12 +64,10 @@ export const addToCartController = async (req, res) => {
 
 export const getCartController = async (req, res) => {
   try {
-    const { token } = req.cookies;
-    const userId = Number(jwt.verify(token, process.env.JWT_SECRET));
-    if (!userId) return res.status(401).json({ error: "Unauthorized" });
+    const { user } = req;
     const cart = await prisma.cart.findFirst({
       where: {
-        userId,
+        userId: req.user,
       },
     });
     if (!cart) return res.status(404).json({ error: "Cart not found" });
@@ -91,7 +87,7 @@ export const getCartController = async (req, res) => {
         },
       },
     });
-    const data = cartItems.map((item) => ({
+    const data = cartItems.map(item => ({
       ...item.product,
       count: item.count,
     }));
@@ -103,9 +99,8 @@ export const getCartController = async (req, res) => {
 
 export const removeProductFromCartController = async (req, res) => {
   try {
-    const { token } = req.cookies;
-    const userId = Number(jwt.verify(token, process.env.JWT_SECRET));
-    if (!userId) return res.status(401).json({ error: "Unauthorized" });
+    const { user } = req;
+
     let { id: productId } = req.params;
     productId = Number(productId);
     const product = await prisma.product.findFirst({
@@ -116,7 +111,7 @@ export const removeProductFromCartController = async (req, res) => {
     if (!product) return res.status(404).json({ error: "Product not found" });
     const cart = await prisma.cart.findFirst({
       where: {
-        userId,
+        userId: user.id,
       },
     });
     if (!cart) return res.status(404).json({ error: "Cart not found" });
@@ -147,9 +142,7 @@ export const removeProductFromCartController = async (req, res) => {
  */
 export const decreaseQuantityController = async (req, res) => {
   try {
-    const { token } = req.cookies;
-    const userId = Number(jwt.verify(token, process.env.JWT_SECRET));
-    if (!userId) return res.status(401).json({ error: "Unauthorized" });
+    const { user } = req;
     let { id: productId } = req.params;
     productId = Number(productId);
     const product = await prisma.product.findFirst({
@@ -160,7 +153,7 @@ export const decreaseQuantityController = async (req, res) => {
     if (!product) return res.status(404).json({ error: "Product not found" });
     const cart = await prisma.cart.findFirst({
       where: {
-        userId,
+        userId: user.id,
       },
     });
     if (!cart) return res.status(404).json({ error: "Cart not found" });

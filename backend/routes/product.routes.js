@@ -1,4 +1,6 @@
 import { Router } from "express";
+
+// Controllers
 import {
   createProductController,
   dislikeProductController,
@@ -7,15 +9,25 @@ import {
   likeProductController,
 } from "../controllers/product.controller.js";
 
+// Middlewares
 import validateData from "../middleware/validateData.js";
 import productSchema from "../schemas/productSchema.js";
+import protectRoute from "../middleware/protectRoute.js";
+import allowAdmin from "../middleware/allowAdmin.js";
 
 const router = Router();
 
-router.post("/", validateData(productSchema), createProductController);
+router.post(
+  "/",
+  allowAdmin,
+  validateData(productSchema),
+  createProductController
+);
+
+router.delete("/:id", allowAdmin);
 router.get("/", getProductsController);
-router.get("/like", getLikedProductsController);
-router.put("/like/:id", likeProductController);
-router.delete("/like/:id", dislikeProductController);
+router.get("/like", protectRoute, getLikedProductsController);
+router.put("/like/:id", protectRoute, likeProductController);
+router.delete("/like/:id", protectRoute, dislikeProductController);
 
 export default router;

@@ -24,17 +24,50 @@ export const signUpController = async (req, res) => {
         .json({ error: "User already exists with that email" });
 
     const hashedPassword = await hash(userData.password, saltRounds);
+
     const user = await prisma.user.create({
-      data: { ...userData, password: hashedPassword },
+      data: { email: userData.email, password: hashedPassword },
     });
-    if (user)
-      return res.status(201).json({
-        id: user.id,
-        title: user.title,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
+    if (userData.role === "customer") {
+      const customer = await prisma.customer.create({
+        data: {
+          title: userData.title,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          User: {
+            connect: {
+              id: user.id,
+            },
+          },
+        },
       });
+
+      if (customer)
+        return res.status(201).json({
+          id: user.id,
+          title: customer.title,
+          email: user.email,
+          firstName: customer.firstName,
+          lastName: customer.lastName,
+        });
+    } else if (userData.role === "admin") {
+      const admin = await prisma.admin.create({
+        data: {
+          User: {
+            connect: {
+              id: user.id,
+            },
+          },
+        },
+      });
+
+      if (admin)
+        return res.status(201).json({
+          id: user.id,
+          email: user.email,
+        });
+    }
+
     return res.status(400).json({ error: "Bad request" });
   } catch (err) {
     handleError(err, res);
@@ -54,20 +87,39 @@ export const loginController = async (req, res) => {
         email: userData.email,
       },
     });
-    if (!existingUser)
+
+    if (
+      !existingUser ||
+      !(await compare(userData.password, existingUser.password))
+    )
       return res.status(400).json({ error: "Invalid credentials" });
-    if (!(await compare(userData.password, existingUser.password)))
-      return res.status(400).json({ error: "Invalid credentials" });
+
     const token = jwt.sign(existingUser.id, process.env.JWT_SECRET);
+
     res.cookie("token", token, {
       maxAge: 1000 * 60 * 60 * 24 * 2,
       httpOnly: true,
     });
+
+    // User is customer
+    if (existingUser.customerId) {
+      const customer = await prisma.customer.findFirst({
+        where: {
+          id: existingUser.customerId,
+        },
+      });
+      return res.status(200).json({
+        id: existingUser.id,
+        title: customer.title,
+        firstName: customer.firstName,
+        lastName: customer.lastName,
+        email: existingUser.email,
+      });
+    }
+
+    // User is an admin
     return res.status(200).json({
       id: existingUser.id,
-      title: existingUser.title,
-      firstName: existingUser.firstName,
-      lastName: existingUser.lastName,
       email: existingUser.email,
     });
   } catch (err) {
@@ -93,23 +145,13 @@ export const logoutController = (req, res) => {
  */
 export const updateUserController = async (req, res) => {
   try {
-    const { token } = req.cookies;
-    if (!token) return res.status(401).json({ error: "Unauthorized" });
+    const { user } = req;
 
-    const userId = Number(jwt.verify(token, process.env.JWT_SECRET));
-
-    if (!userId) return res.status(401).json({ error: "Unauthorized" });
-
-    const user = await prisma.user.findFirst({
-      where: {
-        id: userId,
-      },
-    });
-    if (!user) return res.status(404).json({ error: "User not found" });
+    if (user.adminId) return res.status(400).json({ error: "Bad Request" });
 
     const { body: userData } = req;
 
-    if (compare(userData.currentPassword, user.password)) {
+    if (await compare(userData.currentPassword, user.password)) {
       userData.newPassword = await hash(userData.newPassword, saltRounds);
     } else {
       return res.status(400).json({ error: "Invalid password" });
@@ -117,7 +159,7 @@ export const updateUserController = async (req, res) => {
 
     const updatedUser = await prisma.user.update({
       where: {
-        id: userId,
+        id: user.id,
       },
       data: {
         email: userData.email ? userData.email : user.email,

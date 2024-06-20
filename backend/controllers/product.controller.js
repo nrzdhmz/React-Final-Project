@@ -49,22 +49,14 @@ export const getProductsController = async (req, res) => {
 /**
  *
  * @param {import("express").Request} req
- * @param {Response} res
+ * @param {import("express").Response} res
  */
 export const likeProductController = async (req, res) => {
   try {
-    const { token } = req.cookies;
-    const userId = Number(jwt.verify(token, process.env.JWT_SECRET));
-    if (!userId) return res.status(401).json({ error: "Unauthorized" });
+    const { user } = req;
 
     let { id: productId } = req.params;
     productId = Number(productId);
-    const user = await prisma.user.findFirst({
-      where: {
-        id: userId,
-      },
-    });
-    if (!user) return res.status(404).json({ error: "User not found" });
 
     const product = await prisma.product.findFirst({
       where: {
@@ -76,7 +68,7 @@ export const likeProductController = async (req, res) => {
     if (
       await prisma.user.findFirst({
         where: {
-          id: userId,
+          id: user.id,
           likedProducts: {
             some: {
               id: productId,
@@ -89,7 +81,7 @@ export const likeProductController = async (req, res) => {
 
     await prisma.user.update({
       where: {
-        id: userId,
+        id: user.id,
       },
       data: {
         likedProducts: {
@@ -112,18 +104,10 @@ export const likeProductController = async (req, res) => {
  */
 export const dislikeProductController = async (req, res) => {
   try {
-    const { token } = req.cookies;
-    const userId = Number(jwt.verify(token, process.env.JWT_SECRET));
-    if (!userId) return res.status(401).json({ error: "Unauthorized" });
+    const { user } = req;
 
     let { id: productId } = req.params;
     productId = Number(productId);
-    const user = await prisma.user.findFirst({
-      where: {
-        id: userId,
-      },
-    });
-    if (!user) return res.status(404).json({ error: "User not found" });
 
     const product = await prisma.product.findFirst({
       where: {
@@ -135,7 +119,7 @@ export const dislikeProductController = async (req, res) => {
     if (
       !(await prisma.user.findFirst({
         where: {
-          id: userId,
+          id: user.id,
           likedProducts: {
             some: {
               id: productId,
@@ -148,7 +132,7 @@ export const dislikeProductController = async (req, res) => {
 
     await prisma.user.update({
       where: {
-        id: userId,
+        id: user.id,
       },
       data: {
         likedProducts: {
@@ -171,12 +155,11 @@ export const dislikeProductController = async (req, res) => {
  */
 export const getLikedProductsController = async (req, res) => {
   try {
-    const { token } = req.cookies;
-    const userId = Number(jwt.verify(token, process.env.JWT_SECRET));
-    if (!userId) return res.status(401).json({ error: "Unauthorized" });
+    const { user } = req;
+
     const likedProducts = await prisma.user.findFirst({
       where: {
-        id: userId,
+        id: user.id,
       },
       select: {
         likedProducts: {
@@ -192,6 +175,31 @@ export const getLikedProductsController = async (req, res) => {
     if (!likedProducts)
       return res.status(404).json({ error: "User not found" });
     return res.status(200).json(likedProducts.likedProducts);
+  } catch (err) {
+    handleError(err, res);
+  }
+};
+
+/**
+ *
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ */
+export const deleteProductController = async (req, res) => {
+  try {
+    const { id: productId } = req;
+    const product = await prisma.product.findFirst({
+      where: {
+        id: productId,
+      },
+    });
+    if (!product) return res.status(404).json({ error: "Product Not Found" });
+    await prisma.product.delete({
+      where: {
+        id: product.id,
+      },
+    });
+    return res.status(200).json({ message: "Deleted successfully" });
   } catch (err) {
     handleError(err, res);
   }
