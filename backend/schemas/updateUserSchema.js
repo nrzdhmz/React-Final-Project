@@ -5,8 +5,8 @@ const userSchema = joi.object({
   currentPassword: joi.string().required(),
   newPassword: joi.string().required(),
   title: joi.string().valid("Mr.", "Mrs.").required(),
-  firstName: joi.string().empty(""),
-  lastName: joi.string().empty(""),
+  firstName: joi.string().empty(),
+  lastName: joi.string().empty(),
 });
 
 export default userSchema;
