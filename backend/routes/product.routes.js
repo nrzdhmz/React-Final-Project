@@ -3,6 +3,7 @@ import { Router } from "express";
 // Controllers
 import {
   createProductController,
+  deleteProductController,
   dislikeProductController,
   getLikedProductsController,
   getProductsController,
@@ -24,7 +25,7 @@ router.post(
   createProductController
 );
 
-router.delete("/:id", allowAdmin);
+router.delete("/:id", allowAdmin, deleteProductController);
 router.get("/", getProductsController);
 router.get("/like", protectRoute, getLikedProductsController);
 router.put("/like/:id", protectRoute, likeProductController);
