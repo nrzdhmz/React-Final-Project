@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Logo from "../../assets/images/Logo.png";
 import DG from "../../assets/images/DG.png";
 import LogoWhite from "../../assets/images/LogoWhite.png";
-import Login from '../auth/Login'; 
+import Auth from '../auth/Auth'; 
 import Filter from './Filter';
 import { useAuth } from '../../context/authContext';
 import HeaderTop from './HeaderTop';
@@ -95,7 +95,7 @@ const Header = () => {
       {login && (
         <>
           <div className="cover" onClick={handleCloseLogin}></div>
-          <Login onClose={handleCloseLogin} />
+          <Auth onClose={handleCloseLogin} />
         </>
       )}
       {showCart && (
