@@ -29,7 +29,7 @@ export const createProductController = async (req, res) => {
     });
     return res.status(201).json(createdProduct);
   } catch (err) {
-    fs.unlink(req.file.filename.split(".")[0], err => console.log(err));
+    fs.unlink(`./public/${fileName}`, err => console.log(err));
     handleError(err, res);
   }
 };
