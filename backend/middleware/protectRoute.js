@@ -1,5 +1,6 @@
 import prisma from "../prismaClient/index.js";
 import handleError from "../utils/handleError.js";
+import jwt from "jsonwebtoken";
 
 /**
  *
@@ -33,7 +34,11 @@ const protectRoute = async (req, res, next) => {
     } else {
       const admin = await prisma.admin.findFirst({
         where: {
-          User: user,
+          User: {
+            some: {
+              id: user.id,
+            },
+          },
         },
       });
       req.user = admin;
