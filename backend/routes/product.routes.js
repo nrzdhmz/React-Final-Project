@@ -10,6 +10,7 @@ import {
   getLikedProductsController,
   getProductsController,
   likeProductController,
+  updateProductController,
 } from "../controllers/product.controller.js";
 
 // Middlewares
@@ -17,6 +18,7 @@ import validateData from "../middleware/validateData.js";
 import productSchema from "../schemas/productSchema.js";
 import protectRoute from "../middleware/protectRoute.js";
 import allowAdmin from "../middleware/allowAdmin.js";
+import checkFileInRequest from "../middleware/checkFileInRequest.js";
 
 const router = Router();
 
@@ -41,6 +43,14 @@ router.post(
   upload.single("image"),
   validateData(productSchema),
   createProductController
+);
+
+router.put(
+  "/:id",
+  protectRoute,
+  allowAdmin,
+  checkFileInRequest,
+  updateProductController
 );
 router.delete("/:id", allowAdmin, deleteProductController);
 router.get("/", getProductsController);

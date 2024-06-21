@@ -1,5 +1,8 @@
+import multer from "multer";
 import prisma from "../prismaClient/index.js";
 import handleError from "../utils/handleError.js";
+import fs from "fs";
+import path from "path";
 
 /**
  *
@@ -7,17 +10,26 @@ import handleError from "../utils/handleError.js";
  * @param {import("express").Response} res
  */
 export const createProductController = async (req, res) => {
+  const fileName = `${req.body.category.toLowerCase()}/${req.file.filename}`;
   try {
+    const product = await prisma.product.findFirst({
+      where: {
+        name: req.body.name,
+      },
+    });
+    if (product)
+      return res.status(400).json({ error: "Product already exists" });
     const createdProduct = await prisma.product.create({
       data: {
         category: req.body.category,
         name: req.body.name,
         price: Number(req.body.price),
-        imageUrl: `${req.body.category.toLowerCase()}/${req.file.filename}`,
+        imageUrl: fileName,
       },
     });
     return res.status(201).json(createdProduct);
   } catch (err) {
+    fs.unlink(req.file.filename.split(".")[0], err => console.log(err));
     handleError(err, res);
   }
 };
@@ -41,6 +53,66 @@ export const getProductsController = async (req, res) => {
     res.set("Cache-Control", "public, max-age=31557600");
     return res.status(200).json(products);
   } catch (err) {
+    handleError(err, res);
+  }
+};
+
+/**
+ *
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ */
+export const updateProductController = async (req, res) => {
+  const id = Number(req.params.id);
+
+  const product = await prisma.product.findFirst({ where: { id } });
+
+  if (!product) {
+    return res.status(404).json({ error: "Product not found" });
+  }
+  try {
+    const { body: productData } = req;
+
+    const newProductData = {};
+
+    if (productData.name) {
+      const product = await prisma.product.findFirst({
+        where: {
+          name: productData.name,
+        },
+      });
+      if (product) {
+        return res.status(400).json({ error: "Product already exists" });
+      }
+      newProductData.name = productData.name;
+    }
+    if (productData.category) newProductData.category = productData.category;
+    if (productData.price) newProductData.price = Number(productData.price);
+    if (req?.file?.filename)
+      newProductData.imageUrl = `${
+        newProductData.category
+          ? newProductData.category.toLowerCase()
+          : product.category.toLowerCase()
+      }/${req.file.filename}`;
+
+    const updated = await prisma.product.update({
+      where: {
+        id: product.id,
+      },
+      data: { ...newProductData },
+    });
+    if (
+      req?.file?.filename.split(".")[1] !==
+      product.imageUrl.split("/")[1].split(".")[1]
+    )
+      fs.unlink(`./public/${product.imageUrl}`, err => console.log(err));
+    return res.status(200).json(updated);
+  } catch (err) {
+    if (req.file) {
+      fs.unlink(
+        `./public/${product.category.toLowerCase()}/${req.file.filename}`
+      );
+    }
     handleError(err, res);
   }
 };
