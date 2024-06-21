@@ -114,6 +114,7 @@ export const loginController = async (req, res) => {
         firstName: customer.firstName,
         lastName: customer.lastName,
         email: existingUser.email,
+        role: "customer",
       });
     }
 
@@ -121,6 +122,7 @@ export const loginController = async (req, res) => {
     return res.status(200).json({
       id: existingUser.id,
       email: existingUser.email,
+      role: "admin",
     });
   } catch (err) {
     handleError(err, res);
