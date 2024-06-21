@@ -5,7 +5,7 @@ import joi from "joi";
  * @param {import("joi").Schema} schema
  */
 const validateData =
-  (schema) =>
+  schema =>
   /**
    *
    * @param {import("express").Request} req
@@ -20,7 +20,7 @@ const validateData =
       validated = schema.validate(req.body, { abortEarly: false });
     }
     if (validated.error) {
-      const errorMessages = validated.error.details.map((err) => err.message);
+      const errorMessages = validated.error.details.map(err => err.message);
       return res.status(400).json([...errorMessages]);
     }
     next();

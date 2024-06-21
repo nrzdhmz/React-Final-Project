@@ -1,6 +1,5 @@
 import prisma from "../prismaClient/index.js";
 import handleError from "../utils/handleError.js";
-import jwt from "jsonwebtoken";
 
 /**
  *
@@ -9,14 +8,14 @@ import jwt from "jsonwebtoken";
  */
 export const createProductController = async (req, res) => {
   try {
-    if (typeof req.body === "Array") {
-      const createdProduct = await prisma.product.createMany({
-        data: req.body,
-      });
-      return res.status(201).json(createdProduct);
-    }
-
-    const createdProduct = await prisma.product.create({ data: req.body });
+    const createdProduct = await prisma.product.create({
+      data: {
+        category: req.body.category,
+        name: req.body.name,
+        price: Number(req.body.price),
+        imageUrl: `${req.body.category.toLowerCase()}/${req.file.filename}`,
+      },
+    });
     return res.status(201).json(createdProduct);
   } catch (err) {
     handleError(err, res);
