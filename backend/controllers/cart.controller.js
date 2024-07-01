@@ -21,13 +21,13 @@ export const addToCartController = async (req, res) => {
     if (!product) return res.status(404).json({ error: "Product not found" });
     let cart = await prisma.cart.findFirst({
       where: {
-        userId: user.id,
+        cusromerId: user.id,
       },
     });
     if (!cart)
       cart = await prisma.cart.create({
         data: {
-          userId: user.id,
+          cusromerId: user.id,
         },
       });
 
@@ -64,13 +64,23 @@ export const addToCartController = async (req, res) => {
 
 export const getCartController = async (req, res) => {
   try {
-    const { user } = req;
     const cart = await prisma.cart.findFirst({
       where: {
-        userId: req.user,
+        cusromerId: req.user.id,
       },
     });
-    if (!cart) return res.status(404).json({ error: "Cart not found" });
+    if (!cart) {
+      await prisma.cart.create({
+        data: {
+          customer: {
+            connect: {
+              id: req.user.id,
+            },
+          },
+        },
+      });
+      return res.status(200).json([]);
+    }
     const cartItems = await prisma.productItem.findMany({
       where: {
         cartId: cart.id,
