@@ -27,7 +27,11 @@ const protectRoute = async (req, res, next) => {
     if (user.customerId) {
       const customer = await prisma.customer.findFirst({
         where: {
-          User: user,
+          User: {
+            some: {
+              id: user.id,
+            },
+          },
         },
       });
       req.user = customer;

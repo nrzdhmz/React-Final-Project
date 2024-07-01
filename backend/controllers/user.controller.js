@@ -28,7 +28,7 @@ export const signUpController = async (req, res) => {
     const user = await prisma.user.create({
       data: { email: userData.email, password: hashedPassword },
     });
-    if (userData.role === "customer") {
+    if (userData.role === "customer" || !userData.role) {
       const customer = await prisma.customer.create({
         data: {
           title: userData.title,
@@ -41,6 +41,7 @@ export const signUpController = async (req, res) => {
           },
         },
       });
+      user.customerId = customer.id;
 
       if (customer)
         return res.status(201).json({
